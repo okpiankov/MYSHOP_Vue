@@ -8,6 +8,33 @@ import { Plus, Minus, Trash2 } from 'lucide-vue-next'
 </script>
 
 <template>
+  <div class="flex flex-row h-36 max-w-[500px] gap-1 border border-white border-solid rounded-3xl bg-red-300  text-lg leading-5 ">
+    <img src="/test.jpg" alt="image" class="size-32 rounded-3xl self-center ml-1" />
+
+    <div class="flex flex-col justify-between mt-1 mb-1">
+      <b>Кольцо из золота с бриллиантами и рубинами Артикул: 4010683</b>
+      <div>Количество: 1 шт.</div>
+      <div>Цена:</div>
+    </div>
+
+    <div class="flex flex-col justify-evenly hover:*:text-white  cursor-pointer">
+      <Trash2 />
+      <Minus />
+      <Plus  />
+    </div>
+
+    <!-- Почему не применяется класс аналогичному блоку?: -->
+    <!-- <div сlass="icons">
+      <Trash2 />
+      <Minus />
+      <Plus />
+    </div> -->
+  </div>
+</template>
+
+
+<!-- 
+<template>
   <div class="card">
     <img src="/test.jpg" alt="image" />
 
@@ -23,19 +50,19 @@ import { Plus, Minus, Trash2 } from 'lucide-vue-next'
       <Plus />
     </div>
 
-    <!-- Почему не применяется класс аналогичному блоку?: -->
-    <!-- <div сlass="icons">
+    Почему не применяется класс аналогичному блоку?:
+    <div сlass="icons">
       <Trash2 />
       <Minus />
       <Plus />
-    </div> -->
+    </div>
 
   </div>
 </template>
 
 <style scoped lang="scss">
 .card {
-  height: 130px;
+  height: 145px;
   max-width: 500px;
   background-color: #fca3a3;
   border: 1px solid white;
@@ -46,8 +73,8 @@ import { Plus, Minus, Trash2 } from 'lucide-vue-next'
   font-size: 17px;
 
   img {
-    height: 120px;
-    width: 120px;
+    height: 125px;
+    width: 125px;
     border-radius: 20px;
     align-self: center;
     margin-left: 5px;
@@ -58,6 +85,8 @@ import { Plus, Minus, Trash2 } from 'lucide-vue-next'
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   .icons {
     height: 100%;
@@ -66,6 +95,11 @@ import { Plus, Minus, Trash2 } from 'lucide-vue-next'
     justify-content: space-evenly;
     // margin-right: 10px;
     // background-color: white;
+
+    &>*:hover {
+      color: white;
+      cursor: pointer;
+    }
   }
 }
-</style>
+</style> -->

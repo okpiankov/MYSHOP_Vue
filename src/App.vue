@@ -3,12 +3,12 @@ import { RouterLink, RouterView } from 'vue-router'
 import { UserRound, ShoppingCart, Menu, Gem } from 'lucide-vue-next'
 import DrawerRightMenu from './components/RightMenu.vue'
 import Cart from './components/Cart.vue'
-import Auth from './components/Auth.vue'
 import { provide, ref } from 'vue'
+import LoginForm from './components/LoginForm.vue'
 
 const drawerCart = ref(false)
 const drawerRightMenu = ref(false)
-const popUpAuth = ref(false)
+const popUpLoginForm = ref(false) // реакт.переменная передается через emit через 2 компонента
 
 //Тест provide
 provide('drawerCart', drawerCart)
@@ -23,7 +23,8 @@ const closeRightMenu = () => {
   <Cart v-if="drawerCart" />
   <!-- <Auth v-if="popUpAuth" :popUpAuth="popUpAuth" Почему нельзя передать реактивную переменную через :?/> -->
   <!-- Важно!!! название в род.комп. @popUpAuth такое же как и в доч.комп. в const emit = defineEmits(['popUpAuth']) -->
-  <Auth v-if="popUpAuth" @popUpAuth="popUpAuth = !popUpAuth" />
+  <!-- <Auth v-if="popUpAuth" @popUpAuth="popUpAuth = !popUpAuth" /> -->
+  <LoginForm v-if="popUpLoginForm" @popUpLoginForm="popUpLoginForm = !popUpLoginForm" />
   <did class="container">
     <header>
       <div class="nav">
@@ -34,17 +35,16 @@ const closeRightMenu = () => {
         <div>8-800-777-77-77</div>
       </div>
       <div class="nav">
-        <UserRound @click="popUpAuth = !popUpAuth" />
+        <UserRound @click="popUpLoginForm = !popUpLoginForm" />
         <ShoppingCart @click="drawerCart = !drawerCart" />
         <Menu @click="drawerRightMenu = !drawerRightMenu" />
       </div>
     </header>
-    
+
     <!-- ЛЕЙАУТ корневой роут:-->
     <secttion>
       <RouterView />
     </secttion>
-    
   </did>
 </template>
 
@@ -76,8 +76,11 @@ const closeRightMenu = () => {
       gap: 50px;
       margin-left: 30px;
       margin-right: 30px;
-      .gem {
-        color: rgb(230, 0, 255);
+      div {
+        display: flex;
+        .gem {
+          color: rgb(230, 0, 255);
+        }
       }
     }
     .name {

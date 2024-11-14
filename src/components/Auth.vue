@@ -1,32 +1,59 @@
 <script setup lang="ts">
+import axios from 'axios'
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
 // Передача через emit значения реактивной переменной "popUpAuth = !popUpAuth" т.е true
-const emit = defineEmits(['popUpAuth'])
+// Все значения(и транзитные и текущие) передаются через 1 emit
+
+const emit = defineEmits(['popUpLoginForm', 'auth'])
 // console.log(emit)
+
+const formData = reactive({
+  email: '',
+  password: '123',
+})
+
+const login = async () => {
+  try {
+    const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/auth', formData)
+    console.log(result.data)
+    if (result.data.token) {
+      useRouter().push({ name: 'cabinetPage' })
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 </script>
 
 <template>
-  <!-- <div class="overlay" @click="popUpAuth = !popUpAuth"></div> -->
-  <div class="overlay" @click="emit('popUpAuth')"></div>
+  <!-- <div class="overlay" @click="popUpLoginForm = !popUpLoginForm"></div> -->
+
+  <div class="overlay" @click="emit('popUpLoginForm')"></div>
   <form @submit.prevent="">
-    <input type="text" placeholder="Логин" />
-    <input type="password" placeholder="Пароль" />
-    <button>Войти</button>
+    <input type="email" placeholder="Логин user@test.com" v-model="formData.email" />
+    <input type="password" placeholder="Пароль 123" v-model="formData.password" />
+    <button @click="login()">Войти</button>
+    <div @click="emit('auth')">Регистрация</div>
   </form>
 </template>
 
 <style scoped lang="scss">
 form {
-  height: 180px;
-  width: 330px;
+  height: 245px;
+  width: 360px;
   background-color: #000000 0.8;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 15px;
   border: 1px solid #fca3a3;
   border-radius: 20px;
   // box-shadow: 0 0 10px 20px #fca3a3;
-  padding: 10px;
+  padding: 15px;
   position: fixed;
   top: 120px;
   left: 50%;
@@ -34,8 +61,8 @@ form {
   z-index: 18;
 
   input {
-    height: 40px;
-    width: 315px;
+    height: 45px;
+    width: 330px;
     border-radius: 20px;
     border: 1px solid #fca3a3;
     background-color: #fca3a3;
@@ -46,15 +73,23 @@ form {
     }
   }
   button {
-    height: 40px;
+    height: 45px;
     width: 100%;
     border-radius: 20px;
-    border: 1px solid #fca3a3;
+    border: 2px solid white;
     background-color: #fca3a3;
     font-size: 20px;
     &:hover {
       border-color: black;
       background-color: white;
+    }
+  }
+  div {
+    font-size: 20px;
+    color: rgb(255, 206, 206);
+    cursor: pointer;
+    &:hover {
+      color: white;
     }
   }
 }

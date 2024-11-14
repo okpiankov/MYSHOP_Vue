@@ -1,14 +1,55 @@
 <script setup lang="ts">
 import { CircleX } from 'lucide-vue-next'
 import { inject } from 'vue'
-import InfoBlock from './InfoBlock.vue'
 import CartItem from './CartItem.vue'
+import InfoBlock from './InfoBlock.vue'
 
 const drawerCart = inject('drawerCart')
-
 </script>
 
 <template>
+  <div
+    class="fixed top-0 left-0 w-full h-full bg-black opacity-60 z-10 cursor-pointer"
+    @click="drawerCart = !drawerCart"
+  ></div>
+  <section
+    class="w-[440px] h-full bg-red-200 fixed top-0 right-0 z-20 flex flex-col pt-12 pl-5 pr-5 gap-5 text-xl"
+  >
+    <div class="flex items-center gap-20 mb-5 text-xl font-extrabold">
+      <CircleX @click="drawerCart = !drawerCart" />
+      <div>КОРЗИНА</div>
+    </div>
+    <CartItem />
+    <CartItem />
+
+    <div class="gap-5 text-[22px]">
+      <!-- <InfoBlock
+        title="Корзина пустая"
+        description="Добавьте вашу мечту"
+        image="/basket_empty.jpg"
+      /> -->
+
+      <InfoBlock
+        title="Заказ оформлен!"
+        :description="`Ваш заказ ${id} скоро будет передан курьерской службе`"
+        image="/basket_full.webp"
+      />
+    </div>
+
+    <div class="flex gap-5 text-[22px]">
+      <span> Итого:</span>
+      <b> totalPrice руб.</b>
+    </div>
+    <button
+      class="w-ful h-[50px] bg-red-300 border-2 border-white border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
+    >
+      Оформить заказ
+    </button>
+  </section>
+</template>
+
+
+<!-- <template>
   <div class="overlay" @click="drawerCart = !drawerCart"></div>
   <section>
     <div class="cart">
@@ -19,11 +60,11 @@ const drawerCart = inject('drawerCart')
     <CartItem />
 
     <div class="InfoBlock">
-      <!-- <InfoBlock
+      <InfoBlock
         title="Корзина пустая"
         description="Добавьте вашу мечту"
         image="/basket_empty.jpg"
-      /> -->
+      />
 
       <InfoBlock
         title="Заказ оформлен!"
@@ -42,7 +83,7 @@ const drawerCart = inject('drawerCart')
 
 <style scoped lang="scss">
 section {
-  width: 370px;
+  width: 440px;
   height: 100%;
   background-color: #ffc4c4;
   position: fixed;
@@ -79,6 +120,7 @@ section {
   background-color: black;
   opacity: 0.6;
   z-index: 12;
+  cursor: pointer;
 }
 button {
   width: 100%;
@@ -88,11 +130,11 @@ button {
   border-radius: 20px;
   color: white;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
   &:hover {
     color: black;
     border-color: black;
   }
 }
-</style>
+</style> -->

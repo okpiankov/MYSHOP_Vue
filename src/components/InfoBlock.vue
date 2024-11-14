@@ -7,6 +7,15 @@ defineProps({
 </script>
 
 <template>
+  <div class="flex flex-col gap-7">
+    <img :src="image" alt="Info image" class="size-48 rounded-3xl" />
+    <div>{{ title }}</div>
+    <div>{{ description }}</div>
+  </div>
+</template>
+
+
+<!-- <template>
   <div>
     <img :src="image" alt="Info image" />
     <div>{{ title }}</div>
@@ -25,4 +34,4 @@ div {
     border-radius: 35px;
   }
 }
-</style>
+</style> -->

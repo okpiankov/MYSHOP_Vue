@@ -1,23 +1,50 @@
 <script setup lang="ts">
 import { Gem } from 'lucide-vue-next'
 
-type TypePhoto = {
+type TypeProducts = {
   image: string
   name: string
   price: string
   description: string
+  id: number
 }
-const props = defineProps<TypePhoto>()
+const props = defineProps<TypeProducts>()
 </script>
 
 <template>
+  <div
+    class="w-[320px] h-[410px] flex flex-col gap-2 border-1 bg-white shadow-inner *:shadow-[0_25px_100px_#fca3a3] border-red-300 border-solid rounded-3xl p-[10px] m-[10px] leading-5 transition duration-500 ease-out transform hover:-translate-y-2 hover:shadow-[0_10px_30px_#f88686] text-lg"
+  >
+    <!-- Динамический маршрут -->
+    <RouterLink :to="`/cardBig/${props.id}`">
+      <img
+        :src="props.image"
+        alt="picture"
+        class="h-[250px] w-full border-solid rounded-3xl items-center object-cover cursor-pointer"
+      />
+
+      <strong class="leading-5">{{ props.name }}</strong>
+    </RouterLink>
+
+    <div class="h-6">
+      Цена: {{ props.price }} руб.<Gem
+        class="size-[25px] text-violet-400 relative left-[255px] bottom-[25px] cursor-pointer hover:scale-150 hover:rotate-[360deg] transition-all duration-500 hover:text-violet-600"
+      />
+    </div>
+
+    <div class="description">{{ props.description }}</div>
+  </div>
+</template>
+
+<!-- <template>
    
-  <div class="card">
-    <RouterLink to="/CardBig"> 
+  <div class="card transition-all duration-300 ">
+    Динамический маршрут:
+    <RouterLink :to="`/cardBig/${props.id}`"> 
     <img :src="props.image" alt="picture" />
     <strong>{{ props.name }}</strong>
     </RouterLink>
-    <div>Цена: {{ props.price }} руб.<Gem class="gem" /></div>
+    <div>Цена: {{ props.price }} руб.<Gem class="gem"  /></div>
     <div class="description">{{ props.description }}</div>
   </div>
 
@@ -25,17 +52,18 @@ const props = defineProps<TypePhoto>()
 
 <style scoped lang="scss">
 .card {
-  width: 300px;
-  height: 380px;
+  width: 320px;
+  height: 410px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   background-color: white;
   border: 1px solid #fca3a3;
   border-radius: 20px;
   padding: 10px;
   margin: 10px;
-  font-size: 17px;
+  font-size: 18px;
+  line-height: 22px;
 
   box-shadow: inset 0 20px 30px 15px #fca3a3;
   // box-shadow: 0 3px 0 #fca3a3;
@@ -49,20 +77,22 @@ const props = defineProps<TypePhoto>()
   img {
     border-radius: 20px;
     height: 250px;
-    width: 300px;
+    width: 100%;
     align-items: center;
     object-fit: cover;
     cursor: pointer;
   }
-  .description {
-    font-size: 16px;
+  div {
+    height: 20px;
   }
   .gem {
     width: 25px;
     height: 25px;
     color: rgb(237, 148, 247);
     position: relative;
-    left: 140px;
+    left: 255px;
+    bottom: 25px;
+   
     cursor: pointer;
     &:hover {
       scale: 1.7;
@@ -72,4 +102,6 @@ const props = defineProps<TypePhoto>()
     }
   }
 }
-</style>
+</style> -->
+
+<!-- shadow-inner *:shadow-[0_20px_30px_#fca3a3] -->

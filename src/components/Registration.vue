@@ -1,33 +1,52 @@
 <script setup lang="ts">
-// Передача через emit значения реактивной переменной "popUpAuth = !popUpAuth" т.е true
-const emit = defineEmits(['popUpAuth'])
+import axios from 'axios'
+import { reactive } from 'vue'
+const emit = defineEmits(['popUpLoginForm'])
 // console.log(emit)
+
+const formData = reactive({
+  fullName: '',
+  email: '',
+  password: '',
+  role: 'client',
+})
+
+const register = async () => {
+  try {
+    const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/register', formData)
+    console.log(result.data)
+   
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 </script>
 
 <template>
-  <!-- <div class="overlay" @click="popUpAuth = !popUpAuth"></div> -->
-  <div class="overlay" @click="emit('popUpAuth')"></div>
+  <div class="overlay" @click="emit('popUpLoginForm')"></div>
   <form @submit.prevent="">
-    <input type="text" placeholder="Введите ваше имя" />
-    <input type="text" placeholder="Придумайте логин" />
-    <input type="password" placeholder="Придумайте пароль" />
-    <button>Зарегистрироваться</button>
+    <input type="text" placeholder="Введите ваше имя" v-model="formData.fullName" />
+    <input type="email" placeholder="Придумайте логин" v-model="formData.email" />
+    <input type="password" placeholder="Придумайте пароль" v-model="formData.password" />
+    <button @click="register" >Зарегистрироваться</button>
   </form>
 </template>
 
 <style scoped lang="scss">
 form {
-  height: 250px;
-  width: 330px;
+  height: 260px;
+  width: 360px;
   background-color: #000000 0.8;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 15px;
   border: 1px solid #fca3a3;
   border-radius: 20px;
   // box-shadow: 0 0 10px 20px #fca3a3;
-  padding: 10px;
+  padding: 15px;
   position: fixed;
   top: 120px;
   left: 50%;
@@ -35,22 +54,23 @@ form {
   z-index: 18;
 
   input {
-    height: 40px;
-    width: 315px;
+    height: 45px;
+    width: 335px;
     border-radius: 20px;
     border: 1px solid #fca3a3;
     background-color: #fca3a3;
     font-size: 16px;
     padding-left: 10px;
+    font-size: 20px;
     &:focus {
       outline-color: #ea4335;
     }
   }
   button {
-    height: 40px;
+    height: 45px;
     width: 100%;
     border-radius: 20px;
-    border: 1px solid #fca3a3;
+    border: 2px solid white;
     background-color: #fca3a3;
     font-size: 20px;
     &:hover {

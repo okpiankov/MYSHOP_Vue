@@ -8,6 +8,16 @@ import Order from '../components/Order.vue'
 </script>
 
 <template>
+  <div class="mt-5 ml-5 text-2xl text-white">Мои заказы</div>
+  <section class="w-full h-full flex flex-col gap-5 mb-5">
+    <Order />
+    <Order />
+    <Order />
+  </section>
+</template>
+
+
+<!-- <template>
   <div class="title">Мои заказы</div>
   <section>
     <Order />
@@ -30,4 +40,4 @@ section {
   gap: 20px;
   margin-bottom: 20px;
 }
-</style>
+</style> -->

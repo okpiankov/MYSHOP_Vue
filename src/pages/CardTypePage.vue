@@ -1,8 +1,8 @@
 <script setup lang="ts">
-// import products from '../service/data.ts'
 import Card from '../components/CardMini.vue'
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 type TypeProducts = [
   {
@@ -18,24 +18,29 @@ type TypeProducts = [
 const products = ref<TypeProducts | []>([])
 const isLoading = ref(false)
 
+const type = useRoute().query.type
+console.log(type)
 
-onMounted(async () => {
+const getProducts = async () => {
   isLoading.value = true
   try {
-    const result = await axios.get('https://5063b1fd5cab69bc.mokky.dev/products')
-    // console.log(result.data)
+    const result = await axios.get(`https://5063b1fd5cab69bc.mokky.dev/products?type=${type}`)
+    console.log(result.data)
 
     products.value = result.data
 
-    console.log(products.value)
+    // console.log(products.value)
   } catch (error) {
     console.log(error)
   } finally {
     isLoading.value = false
   }
-})
+}
 
+onMounted(getProducts)
 
+watch(() => type, getProducts, { flush: 'post' })
+// watch(() => useRoute().query.type, getProducts)
 </script>
 
 <template>
@@ -57,7 +62,7 @@ section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
-  
+
   @media (max-width: 1150px) {
     grid-template-columns: repeat(2, 1fr);
   }

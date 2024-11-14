@@ -14,11 +14,14 @@ const emit = defineEmits(['closeRightMenu'])
     <nav class="nav" >
     <CircleX  @click="emit('closeRightMenu')"/>
     <Search />
-    <div class="decoration">Все товары</div>
-    <div class="decoration">Кольца</div>
-    <div class="decoration">Серьги</div>
-    <div class="decoration">Браслеты</div>
-    <div class="decoration">Цепи</div>
+
+    <RouterLink to="/" class="decoration">Все товары</RouterLink>
+   
+    <RouterLink to="/cardType?type=rings" class="decoration">Кольца</RouterLink>
+    <RouterLink to="/cardType?type=earrings" class="decoration">Серьги</RouterLink>
+    <RouterLink to="/cardType?type=bracelets" class="decoration">Браслеты</RouterLink>
+    <RouterLink to="/cardType?type=chains" class="decoration">Цепи</RouterLink>
+    
     <RouterLink to="/blog" class="decoration blog">
        Блог
     </RouterLink>
@@ -30,7 +33,7 @@ const emit = defineEmits(['closeRightMenu'])
 
 <style scoped lang="scss">
 nav {
-  width: 280px;
+  width: 300px;
   height: 100%;
   background-color: #fca3a3;
   position: fixed;
@@ -44,6 +47,7 @@ nav {
   z-index: 20;
   font-size: 23px;
   font-weight: 700;
+  
   .decoration {
     border-bottom: 1px solid black;
     // box-shadow: #6e0000 0px 0px 10px 0px;
@@ -66,6 +70,7 @@ nav {
   background-color: black;
   opacity: 0;
   z-index: 10;
+  cursor: pointer;
 }
 // .active {
 //   transform: translateX(-300px);
