@@ -1,15 +1,43 @@
 <script setup lang="ts">
 import CartItem from '../components/CartItem.vue'
 import InfoBlock from '../components/InfoBlock.vue'
+import { useCartStore } from '../store/cart'
+import { ref } from 'vue'
+
+type TypeCart = {
+  id: number
+  name: string
+  price: string
+  image: string
+  description: string
+  quantity: number
+}
+
+const itemsCart = ref<TypeCart[]>([])
+const cartStore = useCartStore()
+
+//Подписка на товары из Pinia
+const arrayCarts = cartStore.$state
+console.log(arrayCarts)
+
+itemsCart.value = arrayCarts
 </script>
 
 <template>
   <section class="w-full h-full flex flex-col gap-5 pb-5 text-xl">
-    <div class="text-2xl text-white mt-5 ml-5">Мои заказы</div>
-    <CartItem />
-    <CartItem />
+    <div class="text-2xl text-white mt-5 ml-5">Моя корзина</div>
+    <CartItem
+      v-for="item in itemsCart"
+      :key="item.id"
+      :name="item.name"
+      :price="item.price"
+      :image="item.image"
+      :description="item.description"
+      :quantity="item.quantity"
+      :id="item.id"
+    />
 
-    <div class="flex flex-col gap-5 text-white indent-5  text-[22px]">
+    <div div v-if="itemsCart.length === 0" class="flex flex-col gap-5 text-white indent-5 text-[22px]">
       <InfoBlock
         title="Корзина пустая"
         description="Добавьте вашу мечту"

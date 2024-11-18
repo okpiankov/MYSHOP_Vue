@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { Plus, Minus, Trash2 } from 'lucide-vue-next'
-// defineProps({
-//   title: String,
-//   description: String,
-//   image: String,
-// })
+type TypeProducts = {
+  image: string
+  name: string
+  price: string
+  description: string
+  id: number
+  quantity: number
+}
+const props = defineProps<TypeProducts>()
 </script>
 
 <template>
   <div class="flex flex-row h-36 max-w-[500px] gap-1 border border-white border-solid rounded-3xl bg-red-300  text-lg leading-5 ">
-    <img src="/test.jpg" alt="image" class="size-32 rounded-3xl self-center ml-1" />
+    <img :src="props.image" alt="image" class="size-32 rounded-3xl self-center ml-1" />
 
     <div class="flex flex-col justify-between mt-1 mb-1">
-      <b>Кольцо из золота с бриллиантами и рубинами Артикул: 4010683</b>
-      <div>Количество: 1 шт.</div>
-      <div>Цена:</div>
+      <b>{{ props.name }}</b>
+      <div>Количество: {{ props.quantity }} шт.</div>
+      <div>Цена: {{ props.price }} руб.</div>
     </div>
 
     <div class="flex flex-col justify-evenly hover:*:text-white  cursor-pointer">

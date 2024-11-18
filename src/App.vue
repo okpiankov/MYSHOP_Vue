@@ -5,6 +5,7 @@ import DrawerRightMenu from './components/RightMenu.vue'
 import Cart from './components/Cart.vue'
 import { provide, ref } from 'vue'
 import LoginForm from './components/LoginForm.vue'
+import { useCartStore } from './store/cart'
 
 const drawerCart = ref(false)
 const drawerRightMenu = ref(false)
@@ -16,6 +17,7 @@ provide('drawerCart', drawerCart)
 const closeRightMenu = () => {
   drawerRightMenu.value = false
 }
+const cartStore = useCartStore().$state
 </script>
 
 <template>
@@ -36,7 +38,10 @@ const closeRightMenu = () => {
       </div>
       <div class="nav">
         <UserRound @click="popUpLoginForm = !popUpLoginForm" />
-        <ShoppingCart @click="drawerCart = !drawerCart" />
+        <ShoppingCart
+          @click="drawerCart = !drawerCart"
+          :class="{ active: cartStore.length !== 0 }"
+        />
         <Menu @click="drawerRightMenu = !drawerRightMenu" />
       </div>
     </header>
@@ -99,5 +104,8 @@ const closeRightMenu = () => {
     justify-content: center;
     margin-bottom: 35px;
   }
+}
+.active {
+  color: rgb(230, 0, 255);
 }
 </style>

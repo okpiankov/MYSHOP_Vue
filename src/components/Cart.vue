@@ -1,10 +1,34 @@
 <script setup lang="ts">
 import { CircleX } from 'lucide-vue-next'
-import { inject } from 'vue'
+import { inject, reactive, ref, watch } from 'vue'
 import CartItem from './CartItem.vue'
 import InfoBlock from './InfoBlock.vue'
+import { useCartStore } from '../store/cart'
 
 const drawerCart = inject('drawerCart')
+
+type TypeCart = {
+  id: number
+  name: string
+  price: string
+  image: string
+  description: string
+  quantity: number
+}
+
+const itemsCart = ref<TypeCart[]>([])
+const cartStore = useCartStore()
+
+//Подписка на товары из Pinia
+const arrayCarts = cartStore.$state
+console.log(arrayCarts)
+
+itemsCart.value = arrayCarts
+
+// Как в react через useEffect аналог watch делать не надо!
+// watch(arrayCarts, () => {
+//   itemsCart.value = arrayCarts
+// })
 </script>
 
 <template>
@@ -19,21 +43,30 @@ const drawerCart = inject('drawerCart')
       <CircleX @click="drawerCart = !drawerCart" />
       <div>КОРЗИНА</div>
     </div>
-    <CartItem />
-    <CartItem />
+    <CartItem
+      v-for="item in itemsCart"
+      :key="item.id"
+      :name="item.name"
+      :price="item.price"
+      :image="item.image"
+      :description="item.description"
+      :quantity="item.quantity"
+      :id="item.id"
+    />
+    <!-- <CartItem /> -->
 
-    <div class="gap-5 text-[22px]">
-      <!-- <InfoBlock
+    <div v-if="itemsCart.length === 0" class="gap-5 text-[22px]">
+      <InfoBlock
         title="Корзина пустая"
         description="Добавьте вашу мечту"
         image="/basket_empty.jpg"
-      /> -->
+      />
 
-      <InfoBlock
+      <!-- <InfoBlock
         title="Заказ оформлен!"
         :description="`Ваш заказ ${id} скоро будет передан курьерской службе`"
         image="/basket_full.webp"
-      />
+      /> -->
     </div>
 
     <div class="flex gap-5 text-[22px]">
@@ -47,7 +80,6 @@ const drawerCart = inject('drawerCart')
     </button>
   </section>
 </template>
-
 
 <!-- <template>
   <div class="overlay" @click="drawerCart = !drawerCart"></div>

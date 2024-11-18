@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useCartStore } from '../store/cart'
 
 type TypeProduct = {
   image: string
@@ -11,9 +12,10 @@ type TypeProduct = {
   description: string
   id: number
 }
+// const cartStore = useCartStore()
+// console.log(JSON.parse(JSON.stringify(cartStore.$state)))
 
 const id = useRoute().params.id
-
 console.log(id)
 
 const product = ref<TypeProduct | null>(null)
@@ -23,17 +25,44 @@ onMounted(async () => {
   isLoading.value = true
   try {
     const result = await axios.get(`https://5063b1fd5cab69bc.mokky.dev/products/${id}`)
-    console.log(result.data)
+    // console.log(result.data)
 
     product.value = result.data
 
-    console.log(product.value)
+    // console.log(product.value)
   } catch (error) {
     console.log(error)
   } finally {
     isLoading.value = false
   }
 })
+
+// Запись данных карточек товаров в Pinia:
+// Обязательно прописывать  .$state!!!
+
+const cartStore = useCartStore()
+const prevArrayItems = cartStore.$state
+// console.log(prevArrayItems);
+
+const handleAddItemId = () => {
+  if (!prevArrayItems) {
+    const item = [{ ...product.value, quantity: 1 }]
+    cartStore.set(item)
+    
+    return
+  }
+  // console.log(prevArrayItems);
+
+  const ItemInPrevArray = prevArrayItems.find((item) => item.id === product.value?.id)
+  // console.log(ItemInPrevArray);
+
+  if (ItemInPrevArray) {
+    return
+  }
+  const item = [...prevArrayItems, { ...product.value, quantity: 1 }]
+  cartStore.set(item)
+}
+
 //Почему то не надо подписываться на id в отличии от react useEffect
 // watch(id, () => {
 //   функция_запроса(id)
@@ -75,6 +104,7 @@ onMounted(async () => {
         </div>
       </div>
       <button
+        @click="handleAddItemId"
         class="max-w-[260px] h-[50px] bg-red-300 border-2 border-red-300 border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
       >
         Добавить в корзину
@@ -82,7 +112,6 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-
 
 <!-- <template>
   <div class="card">

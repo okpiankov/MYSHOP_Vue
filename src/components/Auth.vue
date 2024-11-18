@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useIsLoadingStore, useAuthStore } from '../store/auth'
 
 // Передача через emit значения реактивной переменной "popUpAuth = !popUpAuth" т.е true
 // Все значения(и транзитные и текущие) передаются через 1 emit
@@ -13,19 +14,31 @@ const formData = reactive({
   email: '',
   password: '123',
 })
+const IsLoadingStore = useIsLoadingStore()
+const authStore = useAuthStore()
 
 const login = async () => {
+  IsLoadingStore.set(true)
   try {
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/auth', formData)
     console.log(result.data)
-    if (result.data.token) {
-      useRouter().push({ name: 'cabinetPage' })
+
+    if (result) {
+      authStore.set({
+        user: result.data,
+      })
     }
+
+    await useRouter().push({ name: 'cabinetPage' })
+    // if (result.data.token) {
+    //   await useRouter().push({ name: 'cabinetPage' })
+    // }
   } catch (error) {
     console.log(error)
+  } finally {
+    IsLoadingStore.set(false)
   }
 }
-
 </script>
 
 <template>
