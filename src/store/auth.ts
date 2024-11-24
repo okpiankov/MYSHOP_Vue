@@ -1,46 +1,46 @@
 import { defineStore } from 'pinia'
+// import { cloneDeep } from 'lodash'
 
-type TAuthData = {
-  email: string
-  fullName: string
-  id: null
-  role: string
-}
-
-type TAuthStore = {
-  user: {
-    data: TAuthData
-    token: string
+export type TypeUser = {
+  data: {
+    email: string | null
+    fullName: string | null
+    id: number | null
+    role: string | null
+    tel?: string | null
   }
+  token: string | null
 }
 
-const defaultvalue: { user: { data: TAuthData; token: string } } = {
-  user: {
-    data: {
-      email: '',
-      fullName: '',
-      id: null,
-      role: '',
-    },
-    token: '',
+const defaultvalue: TypeUser = {
+  data: {
+    email: null,
+    fullName: null,
+    id: null,
+    role: null,
+    tel: null,
   },
+  token: null,
 }
 
 export const useAuthStore = defineStore('auth', {
   state: () => defaultvalue,
   getters: {
-    isAuth: (state) => state.user,
+    isAuth: (state) => state,
   },
   actions: {
-    clear() {
-      this.$patch(defaultvalue)
+    // clear: () => defaultvalue
+    reset() {
+      return this.$patch(defaultvalue)
+    // clear() {
+    //   this.$patch(defaultvalue)
     },
-
-    set(input: TAuthStore) {
-      this.$patch({ user: input })
+    set(data: TypeUser) {
+      this.$patch( data )
     },
   },
 })
+
 
 export const useIsLoadingStore = defineStore('isLoading', {
   state: () => ({
@@ -52,7 +52,7 @@ export const useIsLoadingStore = defineStore('isLoading', {
       this.$patch({ isLoading: data })
     },
   },
-})
+}) 
 
 // type TAuthstore = {
 //   email: string
@@ -96,3 +96,36 @@ export const useIsLoadingStore = defineStore('isLoading', {
 // })
 
 // // Is чтобы понять что это boolean значение
+
+
+// type TAuthData = {
+//   email: string
+//   fullName: string
+//   id: null
+//   role: string
+// }
+
+// type TAuthStore = {
+//   user: {
+//     data: TAuthData
+//     token: string
+//   }
+// }
+
+// const defaultvalue: { user: { data: TAuthData; token: string } } = {
+//   user: {
+//     data: {
+//       email: '',
+//       fullName: '',
+//       id: null,
+//       role: '',
+//     },
+//     token: '',
+//   },
+// }
+
+
+// export  function resetStore({ useAuthStore }) {
+//   const defaultvalue = cloneDeep(useAuthStore.$state)
+//   useAuthStore.$reset = () => useAuthStore.$patch(cloneDeep(defaultvalue))
+// }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Plus, Minus, Trash2 } from 'lucide-vue-next'
+
 type TypeProducts = {
   image: string
   name: string
@@ -9,22 +10,27 @@ type TypeProducts = {
   quantity: number
 }
 const props = defineProps<TypeProducts>()
+const emit = defineEmits(['handlelDeleteClick', 'handlelQuantityClick'])
 </script>
 
 <template>
-  <div class="flex flex-row h-36 max-w-[500px] gap-1 border border-white border-solid rounded-3xl bg-red-300  text-lg leading-5 ">
+  <div
+    class="flex flex-row h-36 max-w-[500px] gap-1 border border-white border-solid rounded-3xl bg-red-300 text-lg leading-5"
+  >
     <img :src="props.image" alt="image" class="size-32 rounded-3xl self-center ml-1" />
 
     <div class="flex flex-col justify-between mt-1 mb-1">
       <b>{{ props.name }}</b>
-      <div>Количество: {{ props.quantity }} шт.</div>
+      <div>
+        Количество: <b>{{ props.quantity }}</b> шт.
+      </div>
       <div>Цена: {{ props.price }} руб.</div>
     </div>
 
-    <div class="flex flex-col justify-evenly hover:*:text-white  cursor-pointer">
-      <Trash2 />
-      <Minus />
-      <Plus  />
+    <div class="flex flex-col justify-evenly hover:*:text-white cursor-pointer">
+      <Trash2 @click="emit('handlelDeleteClick', props.id)" />
+      <Minus @click="emit('handlelQuantityClick', props.id, 'remove')" />
+      <Plus @click="emit('handlelQuantityClick', props.id, 'add')" />
     </div>
 
     <!-- Почему не применяется класс аналогичному блоку?: -->
@@ -35,7 +41,6 @@ const props = defineProps<TypeProducts>()
     </div> -->
   </div>
 </template>
-
 
 <!-- 
 <template>

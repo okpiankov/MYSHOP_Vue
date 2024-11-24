@@ -12,8 +12,6 @@ type TypeProduct = {
   description: string
   id: number
 }
-// const cartStore = useCartStore()
-// console.log(JSON.parse(JSON.stringify(cartStore.$state)))
 
 const id = useRoute().params.id
 console.log(id)

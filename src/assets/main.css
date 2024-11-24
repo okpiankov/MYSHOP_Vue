@@ -4,7 +4,7 @@
 
 @layer components {
   .description-order {
-    @apply min-h-[30px] w-full bg-red-300 border border-white border-solid rounded-[15px] flex flex-row justify-between items-center pl-5 text-lg;
+    @apply min-h-[30px] w-full bg-red-300 border border-white border-solid rounded-[15px] flex flex-row justify-between items-center pl-5 text-lg leading-5;
   }
   .size {
     @apply size-[40px] border-2 border-red-400 border-solid rounded-[10px] flex items-center justify-center cursor-default hover:border-black;

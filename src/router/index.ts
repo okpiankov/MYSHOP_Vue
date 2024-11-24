@@ -4,9 +4,11 @@ import CabinetPage from '../pages/CabinetPage.vue'
 import CardBigPage from '../pages/CardBigPage.vue'
 import BlogPage from '../pages/BlogPage.vue'
 import DataPage from '../pages/DataPage.vue'
-import OrderPage from '../pages/OrderPage.vue'
+import OrdersCabinetPage from '../pages/OrdersCabinetPage.vue'
 import CartCabinetPage from '../pages/CartCabinetPage.vue'
 import CardTypePage from '../pages/CardTypePage.vue'
+import OrdersPage from '../pages/OrdersPage.vue'
+import { useAuthStore } from '../store/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +21,7 @@ const router = createRouter({
     {
       //Динамический маршрут
       path: '/cardBig/:id?',
-      name: 'CardBig',
+      name: 'cardBig',
       component: CardBigPage,
     },
     {
@@ -34,10 +36,16 @@ const router = createRouter({
       component: BlogPage,
     },
     {
+      path: '/ordersPage',
+      name: 'ordersPage',
+      component: OrdersPage,
+    },
+    {
       path: '/cabinet',
       name: 'cabinetPage',
       // component: () => import('../pages/CabinetPage.vue'),
       component: CabinetPage,
+      meta: { protected: true },
 
       //Создаю вложенный лейаут:
       children: [
@@ -49,16 +57,27 @@ const router = createRouter({
         },
         {
           path: 'cartCabinetPage',
+          name: 'cartCabinetPage',
           component: CartCabinetPage,
         },
         {
-          path: 'orderPage',
-          name: 'orderPage',
-          component: OrderPage,
+          path: 'ordersCabinetPage',
+          name: 'ordersCabinetPage',
+          component: OrdersCabinetPage,
         },
       ],
     },
   ],
+})
+
+//Защищенный роутер на личный кабинет покупателя:
+//Обращение к стору  authStore = useAuthStore() обязательно поместить во внутрь beforeEach
+router.beforeEach( (to) => {
+  const authStore = useAuthStore()
+  const requireAuth = to.matched.some((record) => record.meta.protected)
+  if (requireAuth && !authStore.$state.token) {
+    return { name: 'home' }
+  }
 })
 
 export default router

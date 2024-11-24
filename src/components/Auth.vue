@@ -3,6 +3,7 @@ import axios from 'axios'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIsLoadingStore, useAuthStore } from '../store/auth'
+import { useRoute } from 'vue-router'
 
 // Передача через emit значения реактивной переменной "popUpAuth = !popUpAuth" т.е true
 // Все значения(и транзитные и текущие) передаются через 1 emit
@@ -11,45 +12,48 @@ const emit = defineEmits(['popUpLoginForm', 'auth'])
 // console.log(emit)
 
 const formData = reactive({
-  email: '',
+  email: 'user@test.com',
   password: '123',
 })
 const IsLoadingStore = useIsLoadingStore()
 const authStore = useAuthStore()
+const navigate = useRouter()
 
 const login = async () => {
   IsLoadingStore.set(true)
   try {
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/auth', formData)
-    console.log(result.data)
+    // console.log(result.data)
 
-    if (result) {
-      authStore.set({
-        user: result.data,
-      })
-    }
-
-    await useRouter().push({ name: 'cabinetPage' })
-    // if (result.data.token) {
-    //   await useRouter().push({ name: 'cabinetPage' })
-    // }
+    authStore.set(result.data)
   } catch (error) {
     console.log(error)
   } finally {
-    IsLoadingStore.set(false)
+    navigate.push({ name: 'cabinetPage' })
+    IsLoadingStore.set(false) 
   }
 }
+// authStore.$reset()
+// authStore.clear()
 </script>
 
 <template>
   <!-- <div class="overlay" @click="popUpLoginForm = !popUpLoginForm"></div> -->
 
   <div class="overlay" @click="emit('popUpLoginForm')"></div>
-  <form @submit.prevent="">
+  <form @submit.prevent="" class="show">
     <input type="email" placeholder="Логин user@test.com" v-model="formData.email" />
     <input type="password" placeholder="Пароль 123" v-model="formData.password" />
-    <button @click="login()">Войти</button>
+    <button
+      @click="
+        login();
+        emit('popUpLoginForm')
+      "
+    >
+      Войти
+    </button>
     <div @click="emit('auth')">Регистрация</div>
+    <!-- <button @click="authStore.clear()">Очистить стор</button> -->
   </form>
 </template>
 
@@ -115,5 +119,16 @@ form {
   background-color: black;
   opacity: 0.8;
   z-index: 8;
+}
+.show {
+  animation: show 4s;
+}
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

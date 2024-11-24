@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { UserRound, ShoppingCart, Menu, Gem } from 'lucide-vue-next'
+import { UserRound, ShoppingCart, Menu, Gem, LogOut } from 'lucide-vue-next'
 import DrawerRightMenu from './components/RightMenu.vue'
 import Cart from './components/Cart.vue'
 import { provide, ref } from 'vue'
 import LoginForm from './components/LoginForm.vue'
 import { useCartStore } from './store/cart'
+import { useAuthStore } from './store/auth'
+import { useRouter } from 'vue-router'
 
 const drawerCart = ref(false)
 const drawerRightMenu = ref(false)
@@ -18,6 +20,17 @@ const closeRightMenu = () => {
   drawerRightMenu.value = false
 }
 const cartStore = useCartStore().$state
+const authStore = useAuthStore().$state
+const navigate = useRouter()
+
+const Login = () => {
+  if (authStore.token === null) {
+      popUpLoginForm.value = !popUpLoginForm.value
+    } else {
+      navigate.push({ name: 'cabinetPage' })
+    }
+}
+
 </script>
 
 <template>
@@ -37,12 +50,20 @@ const cartStore = useCartStore().$state
         <div>8-800-777-77-77</div>
       </div>
       <div class="nav">
-        <UserRound @click="popUpLoginForm = !popUpLoginForm" />
+        <UserRound
+          @click="Login()
+            // popUpLoginForm = !popUpLoginForm && authStore.token === null
+            //   ? popUpLoginForm = !popUpLoginForm
+            //   : navigate.push({ name: 'cabinetPage' })
+          "
+          :class="{ active: authStore.token !== null }"
+        />
         <ShoppingCart
           @click="drawerCart = !drawerCart"
           :class="{ active: cartStore.length !== 0 }"
         />
         <Menu @click="drawerRightMenu = !drawerRightMenu" />
+        <LogOut @click="authStore.$reset()" v-if="authStore.token !== null" class="logOut" />
       </div>
     </header>
 
@@ -107,5 +128,10 @@ const cartStore = useCartStore().$state
 }
 .active {
   color: rgb(230, 0, 255);
+  font-weight: 900;
+  stroke-width: 3px;
+}
+.logOut {
+  color: red;
 }
 </style>

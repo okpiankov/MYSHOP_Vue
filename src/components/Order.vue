@@ -1,28 +1,37 @@
 <script setup lang="ts">
-// defineProps({
-//   title: String,
-//   description: String,
-//   image: String,
-// })
+type Props = {
+  nameUser: string | null
+  tel: string | null
+  email: string | null
+  delivery: string | null
+  id: number
+  goods: any[]
+  totalPrice: number | null
+}
+
+const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="h-full max-w-[500px] flex flex-col gap-1">
-
-    <div class="description-order">Заказ номер: ID</div>
+  <div class="h-auto max-w-[500px] flex flex-col gap-1 ">
+    <div class="description-order">Заказ номер: {{ props.id }}</div>
     <div class="description-order">
-      <div>Купленные товары:</div>
+      <div class="mr-5">Товары:</div> 
       <ul>
-        <li>Кольцо из белого золота с бриллиантом Артикул: 901013246</li>
-        <li>Кольцо из белого золота с бриллиантом Артикул: 901013246</li>
-        <li>Кольцо из белого золота с бриллиантом Артикул: 901013246</li>
+        <li v-for="item in goods" :key="item.id">
+           <b> {{ item.name }}</b>
+        </li>
       </ul>
     </div>
 
-    <div class="description-order">Общая стоимость: руб.</div>
-    <div class="description-order">Доставка: СДЭК</div>
-    <div class="description-order">Покупатель:</div>
-    <div class="min-h-[30px] w-full bg-white border border-white border-solid rounded-[15px] flex flex-row justify-between items-center pl-5 text-lg status">Статус: В пути!</div>
+    <div class="description-order">К оплате: {{ props.totalPrice }} руб.</div>
+    <div class="description-order">Доставка: {{ props.delivery }}</div>
+    <div class="description-order">Покупатель: {{ props.nameUser }} {{ props.tel }}</div>
+    <div
+      class="min-h-[30px] w-full bg-white border border-white border-solid rounded-[15px] flex flex-row justify-between items-center pl-5 text-lg status"
+    >
+      Статус: На оплате!
+    </div>
   </div>
 </template>
 

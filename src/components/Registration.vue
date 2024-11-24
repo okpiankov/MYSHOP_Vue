@@ -55,7 +55,7 @@ form {
 
   input {
     height: 45px;
-    width: 335px;
+    width: 330px;
     border-radius: 20px;
     border: 1px solid #fca3a3;
     background-color: #fca3a3;

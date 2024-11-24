@@ -3,6 +3,8 @@
 </script>
 
 <template>
+  <div class="left showLeft"></div>
+  <div class="right showRight"></div>
   <div class="container">
     <nav class="nav">
       <div class="decoration cabinet">Личный кабинет</div>
@@ -12,7 +14,7 @@
 
       <router-link to="/cabinet/cartCabinetPage" class="decoration"> Моя корзина </router-link>
 
-      <router-link to="/cabinet/orderPage" class="decoration"> Мои заказы </router-link>
+      <router-link to="/cabinet/ordersCabinetPage" class="decoration"> Мои заказы </router-link>
     </nav>
 
     <!-- ЛЕЙАУТ личный кабинет:-->
@@ -32,6 +34,7 @@
   gap: 10px;
   // border: black 1px solid;
   border-radius: 37px;
+  background-color: black;
 
   nav {
     width: 170px;
@@ -46,7 +49,6 @@
     font-weight: 700;
     padding-right: 3px;
     .cabinet {
-      
       font-size: 25px;
       padding-left: 30px;
       box-shadow: #6e0000 0px 0px 10px 0px;
@@ -69,6 +71,58 @@
     gap: 20px;
     // padding-top: 48px;
     // background-color: #fff;
+  }
+}
+.right {
+  // background-color: #fca3c5;
+  background: url("right.jpg");
+  // background-position: 100% 100%;
+  background-size: cover;
+  opacity: 0.9;
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: 50vw;
+  height: 100vh;
+  z-index: 31;
+}
+.showRight {
+  position: fixed;
+  animation: showRight 8s;
+  z-index: 31;
+}
+@keyframes showRight {
+  from {
+    right: 0;
+  }
+  to {
+    right: -100%;
+  }
+}
+.left {
+  // background-color: black;
+  background: url("left.jpg");
+  background-position: 100% 100%;
+  background-size: cover;
+  opacity: 0.9;
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50vw;
+  height: 100vh;
+  z-index: 31;
+}
+.showLeft {
+  position: fixed;
+  animation: showLeft 8s;
+  z-index: 31;
+}
+@keyframes showLeft {
+  from {
+    left: 0;
+  }
+  to {
+    left: -100%;
   }
 }
 </style>

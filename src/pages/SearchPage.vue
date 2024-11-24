@@ -4,8 +4,7 @@ import CardMini from '../components/CardMini.vue'
 import axios from 'axios'
 import { onMounted, ref, watch } from 'vue'
 import { useCartStore } from '../store/cart'
-import { useAuthStore } from '../store/auth'
-import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 
 type TypeProducts = [
   {
@@ -21,24 +20,33 @@ type TypeProducts = [
 const products = ref<TypeProducts | []>([])
 const isLoading = ref(false)
 
-onMounted(async () => {
+// const [search] = useSearchParams();
+// const title = search.get('title');
+const title = useRoute().query.title
+
+console.log(title)
+
+// onMounted(async () => {
+const fetchProducts = async () => {
   isLoading.value = true
   try {
-    const result = await axios.get('https://5063b1fd5cab69bc.mokky.dev/products')
-    // console.log(result.data)
+    const result = await axios.get(`https://5063b1fd5cab69bc.mokky.dev/products?name=*${title}`)
+    console.log(result.data)
     products.value = result.data
     // console.log(products.value)
-
-    //Запись данных карточек товаров в Pinia:
-    //В .set() передавать result.data а не реакт.пер. products.value
-    // const cartStore = useCartStore()
-    // cartStore.set(result.data)
   } catch (error) {
     console.log(error)
   } finally {
     isLoading.value = false
   }
-})
+}
+fetchProducts()
+
+// watch(title, () => {
+//   fetchProducts()
+// }, {
+//   deep: true
+// })
 
 // Запись данных карточек товаров в Pinia:
 // Обязательно прописывать  .$state!!!
@@ -46,7 +54,7 @@ const cartStore = useCartStore()
 
 // Получаю для проверки из Pinia  массив товаров
 const prevArrayItems = cartStore.$state
-// console.log(prevArrayItems)
+console.log(prevArrayItems)
 
 const handleAddItem = (id: number | null) => {
   // Ищу продукт по id  в массиве всех продуктов
@@ -74,19 +82,7 @@ const handleAddItem = (id: number | null) => {
   // cartStore.set(item)
 
   cartStore.set([...prevArrayItems, { ...productID, quantity: 1 }])
-
 }
-
-
-//С прокси объектом, без приписки .$state не получится вообще обратиться к стору
-console.log(cartStore.$state)
-//Смотрим чистое значение из стора Pinia без прокси объекта
-console.log(JSON.parse(JSON.stringify(cartStore.$state)))
-
-const authStore = useAuthStore()
-//authStore.$state.data.fullName  .$state зачем и с ним и без работает...?
-console.log(JSON.parse(JSON.stringify(authStore.data.fullName)))
-
 </script>
 
 <template>
@@ -118,20 +114,3 @@ section {
   }
 }
 </style>
-
-<!-- // Чтобы увидеть истинное значение во Vue3 в консоли а не прокси объект надо преобразовать!!!
-// Но если в сторе в getters: так (state) => state, то нужно дописать .$state!!!
-const cartStore = useCartStore()
-console.log(JSON.parse(JSON.stringify(cartStore.$state)))
-
-// user@test.com
-const authStore = useAuthStore()
-//Чтобы увидеть истинное значение во Vue3 в консоли а не прокси объект надо преобразовать!!!
-console.log(JSON.parse(JSON.stringify(authStore.user)))
-
-//Как подписаться на изменения в реактивной переменной вне запросов
-watch(products.value, (products) => {
-  console.log(`Массив карточек: ${products}`)
-})
-//Просто через деструкторизацию лучше из стора ничего не забирать правильно использовать хук storeToRefs
-// const { cart } = storeToRefs(cartStore) -->

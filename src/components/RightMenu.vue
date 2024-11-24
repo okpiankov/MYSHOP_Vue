@@ -11,7 +11,7 @@ const emit = defineEmits(['closeRightMenu'])
 <template>
   <!-- <div class="overlay" @click="drawerRightMenu = !drawerRightMenu" ></div> -->
   <div class="overlay" @click="emit('closeRightMenu')" ></div>
-    <nav class="nav" >
+    <nav class="nav showRight" >
     <CircleX  @click="emit('closeRightMenu')"/>
     <Search />
 
@@ -25,9 +25,9 @@ const emit = defineEmits(['closeRightMenu'])
     <RouterLink to="/blog" class="decoration blog">
        Блог
     </RouterLink>
-    <RouterLink to="/cabinet" class="decoration">
+    <!-- <RouterLink to="/cabinet" class="decoration">
        Личный кабинет
-    </RouterLink>
+    </RouterLink> -->
   </nav>
 </template>
 
@@ -72,6 +72,17 @@ nav {
   z-index: 10;
   cursor: pointer;
 }
+.showRight {
+position: fixed;
+animation: showRight 0.8s;
+transition: animation 0.5s ease-in-out;
+z-index: 31;
+}
+@keyframes showRight {
+from {right:-100%;}
+to {right:0;}
+}
+
 // .active {
 //   transform: translateX(-300px);
 //   transition: transform .3s ease-in-out;

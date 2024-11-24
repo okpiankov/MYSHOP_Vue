@@ -21,9 +21,9 @@ export const useCartStore = defineStore('cart', {
   },
   actions: {
     clear() {
-      this.$patch([])
+      this.$patch(initialState)
     },
-
+    
     set(cart: TypeCart) {
       this.$patch(cart)
     },
