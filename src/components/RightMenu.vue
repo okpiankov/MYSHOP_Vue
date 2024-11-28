@@ -22,7 +22,7 @@ const emit = defineEmits(['closeRightMenu'])
     <RouterLink to="/cardType?type=bracelets" class="decoration">Браслеты</RouterLink>
     <RouterLink to="/cardType?type=chains" class="decoration">Цепи</RouterLink>
     
-    <RouterLink to="/blog" class="decoration blog">
+    <RouterLink to="/blog" class="decoration blog" @click="emit('closeRightMenu')">
        Блог
     </RouterLink>
     <!-- <RouterLink to="/cabinet" class="decoration">
@@ -47,6 +47,9 @@ nav {
   z-index: 20;
   font-size: 23px;
   font-weight: 700;
+  @media (max-width: 440px) {
+    gap: 20px;
+  }
   
   .decoration {
     border-bottom: 1px solid black;

@@ -6,8 +6,10 @@ export default {
   ],
   theme: {
    extend: {
+    //Меняю контрольные точки в медиа запросах с min на max и присваиваю значения
     screens: {
       'lg':'1150px',
+      's': {'max': '440px'},
    }
   },
   plugins: [],

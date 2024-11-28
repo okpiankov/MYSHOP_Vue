@@ -91,7 +91,7 @@ const orderSet = async () => {
 </script>
 
 <template>
-  <section class="w-full h-full flex flex-col gap-5 pb-5 text-xl overflow-y-auto">
+  <section class="w-full h-full flex flex-col gap-5 pb-5 text-xl overflow-y-auto s:w-[310px] s:items-center">
     <div class="text-2xl text-white mt-5 ml-5">Моя корзина</div>
     <CartItem
       v-for="item in itemsCart"
@@ -107,7 +107,7 @@ const orderSet = async () => {
     />
 
     <div
-      div
+      
       v-if="itemsCart.length === 0"
       class="flex flex-col gap-5 text-white indent-5 text-[22px]"
     >
@@ -135,7 +135,7 @@ const orderSet = async () => {
     </button> -->
 
     <!-- Карта оформления заказа  -->
-    <div class="mb-4 max-w-[370px]">
+    <div class="mb-4 max-w-[370px] s:w-[310px]">
       <div class="flex justify-start gap-4 text-[22px] text-white">
         <div>Итого:</div>
         <div>{{ totalPrice }} руб.</div>

@@ -121,7 +121,7 @@ const orderSet = async () => {
     @click="drawerCart = !drawerCart"
   ></div>
   <section
-    class="showRight w-[440px] h-full bg-red-200 fixed top-0 right-0 z-20 flex flex-col pt-12 pl-5 pr-5 gap-5 text-xl overflow-y-auto"
+    class="showRight w-[440px] h-full bg-red-200 fixed top-0 right-0 z-20 flex flex-col pt-12 pl-5 pr-5 gap-5 text-xl overflow-y-auto s:w-[340px] s:pl-2"
   >
     <div class="flex items-center gap-20 mb-5 text-xl font-extrabold">
       <CircleX @click="drawerCart = !drawerCart" />

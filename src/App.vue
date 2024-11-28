@@ -25,12 +25,11 @@ const navigate = useRouter()
 
 const Login = () => {
   if (authStore.token === null) {
-      popUpLoginForm.value = !popUpLoginForm.value
-    } else {
-      navigate.push({ name: 'cabinetPage' })
-    }
+    popUpLoginForm.value = !popUpLoginForm.value
+  } else {
+    navigate.push({ name: 'dataPage' })
+  }
 }
-
 </script>
 
 <template>
@@ -42,7 +41,7 @@ const Login = () => {
   <LoginForm v-if="popUpLoginForm" @popUpLoginForm="popUpLoginForm = !popUpLoginForm" />
   <did class="container">
     <header>
-      <div class="nav">
+      <div class="logo">
         <div>
           <Gem class="gem" />
           <RouterLink to="/" class="name">DIAMOND</RouterLink>
@@ -51,7 +50,9 @@ const Login = () => {
       </div>
       <div class="nav">
         <UserRound
-          @click="Login()
+          class="userRound"
+          @click="
+            Login()
             // popUpLoginForm = !popUpLoginForm && authStore.token === null
             //   ? popUpLoginForm = !popUpLoginForm
             //   : navigate.push({ name: 'cabinetPage' })
@@ -59,10 +60,11 @@ const Login = () => {
           :class="{ active: authStore.token !== null }"
         />
         <ShoppingCart
+          class="shoppingCart"
           @click="drawerCart = !drawerCart"
           :class="{ active: cartStore.length !== 0 }"
         />
-        <Menu @click="drawerRightMenu = !drawerRightMenu" />
+        <Menu class="menu" @click="drawerRightMenu = !drawerRightMenu" />
         <LogOut @click="authStore.$reset()" v-if="authStore.token !== null" class="logOut" />
       </div>
     </header>
@@ -85,7 +87,7 @@ const Login = () => {
   display: flex;
   flex-direction: column;
   gap: 30px;
-
+  
   header {
     width: 100%;
     height: 120px;
@@ -96,18 +98,43 @@ const Login = () => {
     justify-content: space-between;
     align-items: center;
     color: white;
-    .nav {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    @media (max-width: 440px) {
+      flex-direction: column;
+      height: 80px;
+      box-shadow: 0 0 20px 30px black;
+    }
+    .logo {
       display: flex;
       align-items: center;
-      gap: 50px;
+      gap: 20px;
       margin-left: 30px;
       margin-right: 30px;
+      @media (max-width: 440px) {
+        justify-content: space-between;
+        margin-top: 10px;
+        margin-left: 0px;
+        margin-right: 0px;
+        // gap: 10px;
+    }
       div {
         display: flex;
         .gem {
           color: rgb(230, 0, 255);
         }
       }
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      margin-left: 30px;
+      margin-right: 30px;
+      @media (max-width: 440px) {
+        margin-bottom: 10px;
+    }
     }
     .name {
       font-size: 23px;
@@ -117,6 +144,7 @@ const Login = () => {
   secttion {
     width: 100%;
     min-height: 800px;
+    // height: 100%;
     border: 1px solid #fca3a3;
     box-shadow: 0 0 20px 30px #fca3a3;
     border-radius: 37px;
@@ -124,6 +152,10 @@ const Login = () => {
     display: flex;
     justify-content: center;
     margin-bottom: 35px;
+    @media (max-width: 440px) {
+      min-height: 200px;
+      // min-height: auto;
+    }
   }
 }
 .active {

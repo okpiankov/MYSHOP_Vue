@@ -70,12 +70,12 @@ const handleAddItemId = () => {
 <template>
   <!-- Адаптация  в tailwindcss наоборот пляшем от MIN-width: -->
   <div
-    class="w-[1000px] min-h-[700px] flex flex-col bg-white border border-red-300 border-solid rounded-[37px] ml-3 mt-3 mr-3 mb-24 lg:flex-row"
+    class="w-[1000px] min-h-[700px] flex flex-col bg-white border border-red-300 border-solid rounded-[37px] ml-3 mt-3 mr-3 mb-24 lg:flex-row s:h-full"
   >
     <img
       :src="product?.image"
       alt="image"
-      class="size-[600px] items-center object-cover rounded-[37px] lg:size-[700px]"
+      class="size-[600px] items-center object-cover rounded-[37px] lg:size-[700px] s:size-[300px]"
     />
 
     <div

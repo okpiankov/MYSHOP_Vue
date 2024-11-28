@@ -22,7 +22,7 @@ const emit = defineEmits(['handleAddItem'])
       <img
         :src="props.image"
         alt="picture"
-        class="h-[250px] w-full border-solid rounded-3xl items-center object-cover cursor-pointer"
+        class="size-[250px] ml-5 border-solid rounded-3xl items-center object-cover cursor-pointer"
       />
 
       <strong class="leading-5">{{ props.name }}</strong>

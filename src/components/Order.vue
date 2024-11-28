@@ -13,7 +13,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="h-auto max-w-[500px] flex flex-col gap-1 ">
+  <div class="h-auto max-w-[500px] flex flex-col gap-1 s:max-w-[310px]">
     <div class="description-order">Заказ номер: {{ props.id }}</div>
     <div class="description-order">
       <div class="mr-5">Товары:</div> 

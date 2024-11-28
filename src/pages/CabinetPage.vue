@@ -28,19 +28,23 @@
 <style scoped lang="scss">
 .container {
   width: 100%;
-  min-height: 800px;
+  // min-height: 800px;
+  height: auto;
   display: flex;
   flex-direction: row;
   gap: 10px;
   // border: black 1px solid;
   border-radius: 37px;
   background-color: black;
+  @media (max-width: 440px) {
+      flex-direction: column;
+    }
 
   nav {
     width: 170px;
-    min-height: 750px;
+    // min-height: 750px;
+    // height: auto;
     background-color: #fca3a3;
-    // bottom: 200px;
     display: flex;
     flex-direction: column;
     gap: 50px;
@@ -48,10 +52,20 @@
     font-size: 23px;
     font-weight: 700;
     padding-right: 3px;
+    @media (max-width: 440px) {
+      gap: 0;
+      min-height: auto;
+      width: 100%;
+    }
+
     .cabinet {
       font-size: 25px;
       padding-left: 30px;
       box-shadow: #6e0000 0px 0px 10px 0px;
+      @media (max-width: 440px) {
+      padding-left: 0;
+      color: white;
+    }
     }
     .decoration {
       border-bottom: 1px solid black;

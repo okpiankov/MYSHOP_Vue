@@ -29,7 +29,7 @@ const login = async () => {
   } catch (error) {
     console.log(error)
   } finally {
-    navigate.push({ name: 'cabinetPage' })
+    navigate.push({ name: 'dataPage' })
     IsLoadingStore.set(false) 
   }
 }
@@ -76,6 +76,9 @@ form {
   left: 50%;
   transform: translateX(-50%);
   z-index: 18;
+  @media (max-width: 440px) {
+    width: 320px;
+  }
 
   input {
     height: 45px;
@@ -85,6 +88,9 @@ form {
     background-color: #fca3a3;
     font-size: 20px;
     padding-left: 10px;
+    @media (max-width: 440px) {
+    width: 280px;
+  }
     &:focus {
       outline-color: #ea4335;
     }
@@ -96,6 +102,10 @@ form {
     border: 2px solid white;
     background-color: #fca3a3;
     font-size: 20px;
+    @media (max-width: 440px) {
+    width: 280px;
+  }
+    
     &:hover {
       border-color: black;
       background-color: white;

@@ -43,9 +43,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="mt-5 ml-5 text-2xl text-white">Мои заказы</div>
+  <div class="mt-5 ml-5 text-2xl text-white s:text-center">Мои заказы</div>
   <div v-if="orders.length === 0" class="mt-5 ml-5 text-2xl text-white">У вас нет заказов</div>
-  <section class="w-full h-full flex flex-col gap-5 mb-5 overflow-y-auto">
+  <section class="w-full h-full flex flex-col gap-5 mb-5 overflow-y-auto s:items-center">
     <Order
       v-for="order in orders"
       :key="order.id"

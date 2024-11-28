@@ -15,12 +15,10 @@ const register = async () => {
   try {
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/register', formData)
     console.log(result.data)
-   
   } catch (error) {
     console.log(error)
   }
 }
-
 </script>
 
 <template>
@@ -29,7 +27,7 @@ const register = async () => {
     <input type="text" placeholder="Введите ваше имя" v-model="formData.fullName" />
     <input type="email" placeholder="Придумайте логин" v-model="formData.email" />
     <input type="password" placeholder="Придумайте пароль" v-model="formData.password" />
-    <button @click="register" >Зарегистрироваться</button>
+    <button @click="register">Зарегистрироваться</button>
   </form>
 </template>
 
@@ -52,7 +50,9 @@ form {
   left: 50%;
   transform: translateX(-50%);
   z-index: 18;
-
+  @media (max-width: 440px) {
+    width: 320px;
+  }
   input {
     height: 45px;
     width: 330px;
@@ -62,6 +62,9 @@ form {
     font-size: 16px;
     padding-left: 10px;
     font-size: 20px;
+    @media (max-width: 440px) {
+      width: 280px;
+    }
     &:focus {
       outline-color: #ea4335;
     }
@@ -73,6 +76,9 @@ form {
     border: 2px solid white;
     background-color: #fca3a3;
     font-size: 20px;
+    @media (max-width: 440px) {
+      width: 280px;
+    }
     &:hover {
       border-color: black;
       background-color: white;
