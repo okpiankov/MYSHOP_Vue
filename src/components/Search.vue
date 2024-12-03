@@ -1,39 +1,7 @@
 <script setup lang="ts">
 import { Search } from 'lucide-vue-next'
 import { ref } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
-
-// type TypeProducts = [
-//   {
-//     image: string
-//     type: string
-//     name: string
-//     price: string
-//     description: string
-//     id: number
-//   },
-// ]
-
-// const products = ref<TypeProducts | []>([])
-// const searchValue = ref('')
-// const isLoading = ref(false)
-
-// // Фильтрую в инпуте поиска фото коллекции через запрос на сервер
-// const getFilteredResults = async () => {
-//   isLoading.value = true
-//   try {
-//     const title = searchValue.value
-//     const result = await axios.get(`https://5063b1fd5cab69bc.mokky.dev/products?name=*${title}`)
-
-//     products.value = result.data
-//     console.log(products.value)
-//   } catch (error) {
-//     console.log(error)
-//   } finally {
-//     isLoading.value = false
-//   }
-// }
 
 const searchQuery = ref('')
 const navigate = useRouter()
@@ -43,20 +11,18 @@ console.log(navigate)
 //формирую из нее url и перенаправляю пользователя на этот url
 const handleSubmit = () => {
   if (!searchQuery.value) {
-      return;
-    }
-const url = `/search?title=${searchQuery.value}`;
-    // setSearchQuery('');
-    searchQuery.value = '';
-    navigate.push(url); //replace 
+    return
+  }
+  const url = `/search?title=${searchQuery.value}`
+  searchQuery.value = ''
+  navigate.push(url)
 }
-  
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit">
-    <button @click="handleSubmit()"><Search  /></button>
-    <input type="text" placeholder="Поиск" v-model="searchQuery"/>
+  <form @submit.prevent="">
+    <button @click="handleSubmit"><Search /></button>
+    <input type="text" placeholder="Поиск" v-model="searchQuery" />
   </form>
 </template>
 

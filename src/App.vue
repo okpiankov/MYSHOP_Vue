@@ -8,6 +8,7 @@ import LoginForm from './components/LoginForm.vue'
 import { useCartStore } from './store/cart'
 import { useAuthStore } from './store/auth'
 import { useRouter } from 'vue-router'
+import Banner from './components/Banner.vue'
 
 const drawerCart = ref(false)
 const drawerRightMenu = ref(false)
@@ -19,12 +20,14 @@ provide('drawerCart', drawerCart)
 const closeRightMenu = () => {
   drawerRightMenu.value = false
 }
-const cartStore = useCartStore().$state
-const authStore = useAuthStore().$state
+
+// useAuthStore().$state и useCartStore().$state не верно!, так работаю с состоянием, а не стором
+const cartStore = useCartStore()
+const authStore = useAuthStore()
 const navigate = useRouter()
 
 const Login = () => {
-  if (authStore.token === null) {
+  if (authStore.$state.token === null) {
     popUpLoginForm.value = !popUpLoginForm.value
   } else {
     navigate.push({ name: 'dataPage' })
@@ -39,6 +42,7 @@ const Login = () => {
   <!-- Важно!!! название в род.комп. @popUpAuth такое же как и в доч.комп. в const emit = defineEmits(['popUpAuth']) -->
   <!-- <Auth v-if="popUpAuth" @popUpAuth="popUpAuth = !popUpAuth" /> -->
   <LoginForm v-if="popUpLoginForm" @popUpLoginForm="popUpLoginForm = !popUpLoginForm" />
+  <!-- <Banner /> -->
   <did class="container">
     <header>
       <div class="logo">
@@ -57,15 +61,29 @@ const Login = () => {
             //   ? popUpLoginForm = !popUpLoginForm
             //   : navigate.push({ name: 'cabinetPage' })
           "
-          :class="{ active: authStore.token !== null }"
+          :class="{ active: authStore.$state.token !== null }"
         />
         <ShoppingCart
           class="shoppingCart"
           @click="drawerCart = !drawerCart"
-          :class="{ active: cartStore.length !== 0 }"
+          v-if="authStore.$state.token === null"
+          :class="{ active: cartStore.$state.cart.length !== 0 }"
+        />
+        <ShoppingCart
+          class="shoppingCart"
+          @click="navigate.push({ name: 'cartCabinetPage' })"
+          v-if="authStore.$state.token !== null"
+          :class="{ active: cartStore.$state.cart.length !== 0 }"
         />
         <Menu class="menu" @click="drawerRightMenu = !drawerRightMenu" />
-        <LogOut @click="authStore.$reset()" v-if="authStore.token !== null" class="logOut" />
+        <LogOut
+          @click="
+            authStore.clear();
+            navigate.push({ name: 'home' })
+          "
+          v-if="authStore.$state.token !== null"
+          class="logOut"
+        />
       </div>
     </header>
 
@@ -77,6 +95,14 @@ const Login = () => {
 </template>
 
 <style scoped lang="scss">
+.loading {
+  font-size: 22px;
+  z-index: 60;
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+
+}
 .container {
   width: 85%;
   height: 100%;
@@ -87,7 +113,7 @@ const Login = () => {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  
+
   header {
     width: 100%;
     height: 120px;
@@ -101,7 +127,7 @@ const Login = () => {
     position: sticky;
     top: 0;
     z-index: 3;
-    @media (max-width: 440px) {
+    @media (max-width: 770px) {
       flex-direction: column;
       height: 80px;
       box-shadow: 0 0 20px 30px black;
@@ -118,7 +144,7 @@ const Login = () => {
         margin-left: 0px;
         margin-right: 0px;
         // gap: 10px;
-    }
+      }
       div {
         display: flex;
         .gem {
@@ -134,7 +160,7 @@ const Login = () => {
       margin-right: 30px;
       @media (max-width: 440px) {
         margin-bottom: 10px;
-    }
+      }
     }
     .name {
       font-size: 23px;
@@ -148,9 +174,12 @@ const Login = () => {
     border: 1px solid #fca3a3;
     box-shadow: 0 0 20px 30px #fca3a3;
     border-radius: 37px;
-    background-color: #ffc4c4;
+    background-color: #ffc4c4;  
     display: flex;
-    justify-content: center;
+    // flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: center;
     margin-bottom: 35px;
     @media (max-width: 440px) {
       min-height: 200px;

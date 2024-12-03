@@ -9,8 +9,9 @@ import CartCabinetPage from '../pages/CartCabinetPage.vue'
 import CardTypePage from '../pages/CardTypePage.vue'
 import OrdersPage from '../pages/OrdersPage.vue'
 import { useAuthStore } from '../store/auth'
+import SearchPage from '@/pages/SearchPage.vue'
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -29,6 +30,12 @@ const router = createRouter({
       path: '/cardType',
       name: 'cardType',
       component: CardTypePage,
+    },
+    {
+      //Не линкую,  перейти можно только программно:
+      path: '/search',
+      name: 'search',
+      component: SearchPage,
     },
     {
       path: '/blog',

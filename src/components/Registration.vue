@@ -1,20 +1,36 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+
 const emit = defineEmits(['popUpLoginForm'])
 // console.log(emit)
 
-const formData = reactive({
-  fullName: '',
-  email: '',
-  password: '',
-  role: 'client',
-})
+// const formData = reactive({
+//   fullName: '',
+//   email: '',
+//   password: '',
+//   role: 'client',
+// })
+
+// Определение начального состояния
+const initialState = { fullName: '', email: '', password: '', role: 'client' }
+
+// Создание реактивного объекта
+const formData = reactive({ ...initialState })
+
+// Функция для сброса формы
+function resetForm() {
+  Object.assign(formData, initialState)
+}
+
+const reg = ref(null)
 
 const register = async () => {
   try {
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/register', formData)
     console.log(result.data)
+
+    reg.value = result.data.token
   } catch (error) {
     console.log(error)
   }
@@ -23,11 +39,19 @@ const register = async () => {
 
 <template>
   <div class="overlay" @click="emit('popUpLoginForm')"></div>
+  <div class="reg" v-if="reg !== null">Вы успешно зарегистрировались!</div>
   <form @submit.prevent="">
     <input type="text" placeholder="Введите ваше имя" v-model="formData.fullName" />
     <input type="email" placeholder="Придумайте логин" v-model="formData.email" />
     <input type="password" placeholder="Придумайте пароль" v-model="formData.password" />
-    <button @click="register">Зарегистрироваться</button>
+    <button
+      @click="
+        register();
+        resetForm()
+      "
+    >
+      Зарегистрироваться
+    </button>
   </form>
 </template>
 
@@ -94,5 +118,15 @@ form {
   background-color: black;
   opacity: 0.8;
   z-index: 8;
+  cursor: pointer;
+}
+.reg {
+  position: fixed;
+  top: 450px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 58;
+  color: white;
+  font-size: 22px;
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIsLoadingStore, useAuthStore } from '../store/auth'
 import { useRoute } from 'vue-router'
@@ -26,22 +26,24 @@ const login = async () => {
     // console.log(result.data)
 
     authStore.set(result.data)
+    // await navigate.push({ name: 'dataPage' })
+
   } catch (error) {
     console.log(error)
   } finally {
+    IsLoadingStore.set(false)
     navigate.push({ name: 'dataPage' })
-    IsLoadingStore.set(false) 
   }
 }
-// authStore.$reset()
-// authStore.clear()
+
 </script>
 
 <template>
   <!-- <div class="overlay" @click="popUpLoginForm = !popUpLoginForm"></div> -->
-
   <div class="overlay" @click="emit('popUpLoginForm')"></div>
-  <form @submit.prevent="" class="show">
+
+   <div  v-if="IsLoadingStore.isLoading" class="loading">Загрузка...</div>
+  <form  v-else @submit.prevent="" class="show">
     <input type="email" placeholder="Логин user@test.com" v-model="formData.email" />
     <input type="password" placeholder="Пароль 123" v-model="formData.password" />
     <button
@@ -53,11 +55,20 @@ const login = async () => {
       Войти
     </button>
     <div @click="emit('auth')">Регистрация</div>
-    <!-- <button @click="authStore.clear()">Очистить стор</button> -->
   </form>
 </template>
 
 <style scoped lang="scss">
+.loading {
+  font-size: 22px;
+  position: fixed;
+  z-index: 50;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+}
 form {
   height: 245px;
   width: 360px;
@@ -129,6 +140,7 @@ form {
   background-color: black;
   opacity: 0.8;
   z-index: 8;
+  cursor: pointer;
 }
 .show {
   animation: show 4s;

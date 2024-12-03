@@ -27,7 +27,7 @@ const data2 = {
 section {
   height: auto;
   width: 100%;
-  border-radius: 40px;
+  border-radius: 37px;
   background-color: black;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -63,6 +63,7 @@ section {
     justify-content: center;
     align-items: center;
     padding: 40px;
+    overflow: hidden;
 
     @media (max-width: 1150px) {
       height: 330px;
@@ -100,6 +101,7 @@ section {
     justify-content: center;
     align-items: center;
     padding: 40px;
+    overflow: hidden;
     @media (max-width: 1150px) {
       height: 220px;
       border-radius: 50px;

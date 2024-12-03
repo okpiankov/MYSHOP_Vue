@@ -8,6 +8,7 @@ type TypeProducts = {
   description: string
   id: number
 }
+
 const props = defineProps<TypeProducts>()
 const emit = defineEmits(['handleAddItem'])
 
@@ -31,7 +32,7 @@ const emit = defineEmits(['handleAddItem'])
     <div class="h-6">
       <!-- Передача в функцию handleAddItem аргумента id в emit происходит странным образом: -->
       Цена: {{ props.price }} руб.<Gem
-        @click="emit('handleAddItem', props.id)" 
+        @click="emit('handleAddItem', props.id)"
         class="size-[25px] text-violet-400 relative left-[255px] bottom-[25px] cursor-pointer hover:scale-150 hover:rotate-[360deg] transition-all duration-500 hover:text-violet-600"
       />
     </div>

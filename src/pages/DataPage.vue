@@ -13,7 +13,7 @@ const authStore = useAuthStore()
     <div>Ваш телефон: {{ authStore.$state.data.tel }}</div>
     <div>Ваш id: {{ authStore.$state.data.id }}</div>
 
-    <div class="container mx-auto">
+    <!-- <div class="container mx-auto">
       <div class="flex justify-center items-center">
         <div class="w-full h-[3px] bg-gray-200 overflow-x-auto relative rounded-lg shadow-lg">
           <div
@@ -21,7 +21,7 @@ const authStore = useAuthStore()
           ></div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

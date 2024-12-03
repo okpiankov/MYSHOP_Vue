@@ -6,6 +6,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useCartStore } from '../store/cart'
 import { useAuthStore } from '../store/auth'
 import { storeToRefs } from 'pinia'
+// import { handleAddItem } from '../service/localStorage'
 
 type TypeProducts = [
   {
@@ -27,12 +28,7 @@ onMounted(async () => {
     const result = await axios.get('https://5063b1fd5cab69bc.mokky.dev/products')
     // console.log(result.data)
     products.value = result.data
-    // console.log(products.value)
-
-    //Запись данных карточек товаров в Pinia:
-    //В .set() передавать result.data а не реакт.пер. products.value
-    // const cartStore = useCartStore()
-    // cartStore.set(result.data)
+   
   } catch (error) {
     console.log(error)
   } finally {
@@ -41,27 +37,26 @@ onMounted(async () => {
 })
 
 // Запись данных карточек товаров в Pinia:
-// Обязательно прописывать  .$state!!!
 const cartStore = useCartStore()
 
 // Получаю для проверки из Pinia  массив товаров
-const prevArrayItems = cartStore.$state
-// console.log(prevArrayItems)
+// Обязательно прописывать  .$state!!!
+// const prevArrayItems = cartStore.$state
+const prevArrayItems = cartStore.$state.cart
+console.log(prevArrayItems)
 
 const handleAddItem = (id: number | null) => {
   // Ищу продукт по id  в массиве всех продуктов
   const productID = products.value.find((item) => item.id === id)
+  console.log(productID)
 
   // Проверяю и записываю ЕДИНОЖДЫ в Pinia  массив с объектом найденным по id
   if (!prevArrayItems && productID !== undefined) {
-    // const item = [{ ...productID, quantity: 1 }]
-    // cartStore.set(item)
-
+    
     cartStore.set([{ ...productID, quantity: 1 }])
-
+    
     return
   }
-
   // Проверяю есть ли такой же объект в массиве по id
   const ItemInPrevArray = prevArrayItems.find((item) => item.id === id)
   // console.log(ItemInPrevArray);
@@ -70,26 +65,15 @@ const handleAddItem = (id: number | null) => {
     return
   }
   // Дозаписываю  в  Pinia объект которого нет по id через {...productID}
-  // const item = [...prevArrayItems, { ...productID, quantity: 1 }]
-  // cartStore.set(item)
-
+  
   cartStore.set([...prevArrayItems, { ...productID, quantity: 1 }])
 
 }
 
-
-//С прокси объектом, без приписки .$state не получится вообще обратиться к стору
-console.log(cartStore.$state)
-//Смотрим чистое значение из стора Pinia без прокси объекта
-console.log(JSON.parse(JSON.stringify(cartStore.$state)))
-
-const authStore = useAuthStore()
-//authStore.$state.data.fullName  .$state зачем и с ним и без работает...?
-console.log(JSON.parse(JSON.stringify(authStore.data.fullName)))
-
 </script>
 
 <template>
+  <div v-if="isLoading" class="loading">Загрузка...</div>
   <section>
     <CardMini
       v-for="item in products"
@@ -105,15 +89,18 @@ console.log(JSON.parse(JSON.stringify(authStore.data.fullName)))
 </template>
 
 <style scoped lang="scss">
+ .loading {
+  font-size: 22px;
+}
 section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
 
-  @media (max-width: 1150px) {
+  @media (max-width: 1200px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     grid-template-columns: repeat(1, 1fr);
   }
 }
@@ -135,3 +122,18 @@ watch(products.value, (products) => {
 })
 //Просто через деструкторизацию лучше из стора ничего не забирать правильно использовать хук storeToRefs
 // const { cart } = storeToRefs(cartStore) -->
+
+<!-- //Запись данных карточек товаров в Pinia:
+//В .set() передавать result.data а не реакт.пер. products.value
+// const cartStore = useCartStore()
+// cartStore.set(result.data) -->
+
+
+<!-- // //С прокси объектом, без приписки .$state не получится вообще обратиться к стору
+// console.log(cartStore.$state)
+// //Смотрим чистое значение из стора Pinia без прокси объекта
+// console.log(JSON.parse(JSON.stringify(cartStore.$state)))
+
+// const authStore = useAuthStore()
+// //authStore.$state.data.fullName  .$state зачем и с ним и без работает...?
+// console.log(JSON.parse(JSON.stringify(authStore.data.fullName))) -->

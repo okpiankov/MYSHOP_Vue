@@ -13,8 +13,8 @@ const emit = defineEmits(['closeRightMenu'])
   <div class="overlay" @click="emit('closeRightMenu')" ></div>
     <nav class="nav showRight" >
     <CircleX  @click="emit('closeRightMenu')"/>
-    <Search />
-
+    <!-- Не линкую,  перейти можно только программно:-->
+   <Search />
     <RouterLink to="/" class="decoration">Все товары</RouterLink>
    
     <RouterLink to="/cardType?type=rings" class="decoration">Кольца</RouterLink>

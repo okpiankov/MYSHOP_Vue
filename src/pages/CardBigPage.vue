@@ -3,6 +3,7 @@ import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCartStore } from '../store/cart'
+// import { handleAddItemId } from '../service/localStorage'
 
 type TypeProduct = {
   image: string
@@ -35,31 +36,31 @@ onMounted(async () => {
   }
 })
 
-// Запись данных карточек товаров в Pinia:
-// Обязательно прописывать  .$state!!!
+// // Запись данных карточек товаров в Pinia:
+// // Обязательно прописывать  .$state!!!
 
-const cartStore = useCartStore()
-const prevArrayItems = cartStore.$state
-// console.log(prevArrayItems);
+// const cartStore = useCartStore()
+// const prevArrayItems = cartStore.$state.cart
+// // console.log(prevArrayItems);
 
-const handleAddItemId = () => {
-  if (!prevArrayItems) {
-    const item = [{ ...product.value, quantity: 1 }]
-    cartStore.set(item)
+// const handleAddItemId = () => {
+//   if (!prevArrayItems) {
+//     const item = [{ ...product.value, quantity: 1 }]
+//     cartStore.set(item)
     
-    return
-  }
-  // console.log(prevArrayItems);
+//     return
+//   }
+//   // console.log(prevArrayItems);
 
-  const ItemInPrevArray = prevArrayItems.find((item) => item.id === product.value?.id)
-  // console.log(ItemInPrevArray);
+//   const ItemInPrevArray = prevArrayItems.find((item) => item.id === product.value?.id)
+//   // console.log(ItemInPrevArray);
 
-  if (ItemInPrevArray) {
-    return
-  }
-  const item = [...prevArrayItems, { ...product.value, quantity: 1 }]
-  cartStore.set(item)
-}
+//   if (ItemInPrevArray) {
+//     return
+//   }
+//   const item = [...prevArrayItems, { ...product.value, quantity: 1 }]
+//   cartStore.set(item)
+// }
 
 //Почему то не надо подписываться на id в отличии от react useEffect
 // watch(id, () => {
@@ -68,18 +69,18 @@ const handleAddItemId = () => {
 </script>
 
 <template>
-  <!-- Адаптация  в tailwindcss наоборот пляшем от MIN-width: -->
+  <div v-if="isLoading" class="text-[22px]">Загрузка...</div>
   <div
-    class="w-[1000px] min-h-[700px] flex flex-col bg-white border border-red-300 border-solid rounded-[37px] ml-3 mt-3 mr-3 mb-24 lg:flex-row s:h-full"
+    class="w-[1000px] min-h-[700px] flex flex-row bg-white border border-red-300 border-solid rounded-[37px] ml-3 mt-3 mr-3 mb-24 m:flex-col m:w-[650px] 2s:w-[500px] s:w-[300px] s:h-full"
   >
     <img
       :src="product?.image"
       alt="image"
-      class="size-[600px] items-center object-cover rounded-[37px] lg:size-[700px] s:size-[300px]"
+      class="size-[700px] items-center object-cover rounded-[37px] m:size-[600px] 2s:size-[400px] s:size-[300px]"
     />
 
     <div
-      class="flex flex-col justify-start lg:gap-6 lg:p-5 lg:pl-0 text-xl h-full pl-5 pb-5 pr-5 gap-2"
+      class="flex flex-col justify-start text-xl h-full pt-5 pb-5 pr-5 gap-5 m:gap-2 m:pl-5 m:pt-0"
     >
       <strong>{{ product?.name }}</strong>
       <div>Цена: {{ product?.price }} руб.</div>
@@ -102,7 +103,7 @@ const handleAddItemId = () => {
         </div>
       </div>
       <button
-        @click="handleAddItemId"
+        @click="handleAddItemId()"
         class="max-w-[260px] h-[50px] bg-red-300 border-2 border-red-300 border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
       >
         Добавить в корзину

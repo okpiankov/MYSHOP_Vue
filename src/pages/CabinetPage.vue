@@ -28,8 +28,8 @@
 <style scoped lang="scss">
 .container {
   width: 100%;
-  // min-height: 800px;
-  height: auto;
+  min-height: 800px;
+  // height: auto;
   display: flex;
   flex-direction: row;
   gap: 10px;

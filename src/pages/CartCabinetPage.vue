@@ -14,16 +14,35 @@ type TypeCart = {
   image: string
   description: string
   quantity: number
-}
+} 
 
 const itemsCart = ref<TypeCart[]>([])
 const cartStore = useCartStore()
 const authStore = useAuthStore()
 
 //Подписка на товары из Pinia
-const arrayCarts = cartStore.$state
+const arrayCarts = cartStore.$state.cart
 console.log(arrayCarts)
 itemsCart.value = arrayCarts
+
+// Функция удаления товара из корзины и Pinia
+const handlelDeleteClick = id => {
+    // const cartStore = useCartStore()
+    // const arrayItem = cartStore.$state
+    const arrayItem = itemsCart.value.map(item => ({ ...item }));
+    console.log(JSON.parse(JSON.stringify(arrayItem)))
+
+    //получаю новый массив исключающий объект по id
+    const newArray = arrayItem.filter(item => item.id !== id);
+    console.log(JSON.parse(JSON.stringify(newArray)))
+
+    //записываю новый массив товаров в Pinia после каждого удаления товара
+    // localStorage.setItem('itemCart', JSON.stringify(newArray));
+
+    cartStore.set(newArray);
+    
+    itemsCart.value = newArray;
+  };
 
 const handlelQuantityClick = (id, action) => {
   //Делаю копию массива
@@ -53,7 +72,6 @@ console.log(totalPrice)
 
 const isLoading = ref(false)
 const formData = reactive({
-  nameUser: authStore.$state.data.fullName,
   tel: '',
   pay: '',
   delivery: '',
@@ -67,18 +85,19 @@ const arrayProducts = itemsCart.value.map((item) => ({
   price: item.price,
 }))
 // console.log(arrayProducts);
-//arrayOrder(заказ) это объект не массив
-const arrayOrder = {
-  ...formData,
-  total_price: totalPrice,
-  user_id: authStore.$state.data.id,
-  goods: [...arrayProducts],
-}
-console.log(arrayOrder)
+
 const navigate = useRouter()
 const orderSet = async () => {
   isLoading.value = true
   try {
+
+    const arrayOrder = {
+  // Указываю id user в таком формате: user_id для связи покупателя именно его заказами
+  user_id: authStore.$state.data.id,
+  ...formData,
+  total_price: totalPrice,
+  goods: [...arrayProducts],
+}
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/orders', arrayOrder)
     // console.log(result.data)
   } catch (error) {
@@ -116,23 +135,8 @@ const orderSet = async () => {
         description="Добавьте вашу мечту"
         image="/basket_empty.jpg"
       />
-
-      <!-- <InfoBlock
-        title="Заказ оформлен!"
-        :description="`Ваш заказ ${id} скоро будет передан курьерской службе`"
-        image="/basket_full.webp"
-      /> -->
+      
     </div>
-
-    <!-- <div class="flex gap-5 text-white indent-5 text-[22px]">
-      <span> Итого:</span>
-      <b> totalPrice руб.</b>
-    </div>
-    <button
-      class="max-w-[370px] h-12 bg-red-300 border-2 border-white border-solid rounded-3xl cursor-pointer text-2xl hover:bg-white"
-    >
-      Оформить заказ
-    </button> -->
 
     <!-- Карта оформления заказа  -->
     <div class="mb-4 max-w-[370px] s:w-[310px]">
@@ -170,7 +174,7 @@ const orderSet = async () => {
           <option>СДЭК</option>
         </select>
         <button
-          @click="orderSet()"
+          @click="orderSet(); cartStore.clear()"
           class="w-ful h-[50px] bg-red-300 border-2 border-white border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
         >
           Оформить заказ

@@ -20,72 +20,41 @@ type TypeProducts = [
 const products = ref<TypeProducts | []>([])
 const isLoading = ref(false)
 
-// const [search] = useSearchParams();
-// const title = search.get('title');
-const title = useRoute().query.title
-
+//Обращаться здесь к useRoute().query.title не надо работать не будет!
+//к  title  обращаться .query.title непосредственно в fetchProducts и  watch()
+//const title = useRoute().query.title
+const title = useRoute()
 console.log(title)
 
-// onMounted(async () => {
 const fetchProducts = async () => {
   isLoading.value = true
   try {
-    const result = await axios.get(`https://5063b1fd5cab69bc.mokky.dev/products?name=*${title}`)
+    const result = await axios.get(
+      `https://5063b1fd5cab69bc.mokky.dev/products?name=*${title.query.title}`,
+    )
     console.log(result.data)
     products.value = result.data
-    // console.log(products.value)
   } catch (error) {
     console.log(error)
   } finally {
     isLoading.value = false
   }
 }
-fetchProducts()
+// fetchProducts()
+// onMounted(fetchProducts)
 
-// watch(title, () => {
-//   fetchProducts()
-// }, {
-//   deep: true
-// })
-
-// Запись данных карточек товаров в Pinia:
-// Обязательно прописывать  .$state!!!
-const cartStore = useCartStore()
-
-// Получаю для проверки из Pinia  массив товаров
-const prevArrayItems = cartStore.$state
-console.log(prevArrayItems)
-
-const handleAddItem = (id: number | null) => {
-  // Ищу продукт по id  в массиве всех продуктов
-  const productID = products.value.find((item) => item.id === id)
-
-  // Проверяю и записываю ЕДИНОЖДЫ в Pinia  массив с объектом найденным по id
-  if (!prevArrayItems && productID !== undefined) {
-    // const item = [{ ...productID, quantity: 1 }]
-    // cartStore.set(item)
-
-    cartStore.set([{ ...productID, quantity: 1 }])
-
-    return
-  }
-
-  // Проверяю есть ли такой же объект в массиве по id
-  const ItemInPrevArray = prevArrayItems.find((item) => item.id === id)
-  // console.log(ItemInPrevArray);
-
-  if (ItemInPrevArray || productID === undefined) {
-    return
-  }
-  // Дозаписываю  в  Pinia объект которого нет по id через {...productID}
-  // const item = [...prevArrayItems, { ...productID, quantity: 1 }]
-  // cartStore.set(item)
-
-  cartStore.set([...prevArrayItems, { ...productID, quantity: 1 }])
-}
+//Подписка на  title(что ввел в инпут поиска)
+watch(
+  () => title.query.title,
+  fetchProducts,
+  // Магия, ищи сейчас, не лениво:
+  { immediate: true },
+)
 </script>
 
 <template>
+  <div v-if="isLoading" class="loading">Загрузка...</div>
+  <div v-else-if="products.length === 0" class="notSuccessful">Ничего не найдено</div>
   <section>
     <CardMini
       v-for="item in products"
@@ -101,6 +70,11 @@ const handleAddItem = (id: number | null) => {
 </template>
 
 <style scoped lang="scss">
+.notSuccessful,
+.loading {
+  font-size: 22px;
+}
+
 section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

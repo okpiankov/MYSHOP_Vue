@@ -1,32 +1,26 @@
 <script setup lang="ts">
-type Props = {
-  nameUser: string | null
-  tel: string | null
-  email: string | null
-  delivery: string | null
-  id: number
-  goods: any[]
-  totalPrice: number | null
-}
 
-const props = defineProps<Props>()
+const props = defineProps(['user', 'id', 'goods', 'totalPrice', 'tel', 'pay', 'delivery'])
 </script>
 
 <template>
   <div class="h-auto max-w-[500px] flex flex-col gap-1 s:max-w-[310px]">
     <div class="description-order">Заказ номер: {{ props.id }}</div>
     <div class="description-order">
-      <div class="mr-5">Товары:</div> 
+      <div class="mr-5">Товары:</div>
       <ul>
         <li v-for="item in goods" :key="item.id">
-           <b> {{ item.name }}</b>
+          <b> {{ item.name }}</b>
         </li>
       </ul>
     </div>
 
     <div class="description-order">К оплате: {{ props.totalPrice }} руб.</div>
     <div class="description-order">Доставка: {{ props.delivery }}</div>
-    <div class="description-order">Покупатель: {{ props.nameUser }} {{ props.tel }}</div>
+    <div class="description-order">
+      Покупатель: <b> {{ props.user.fullName }} тел:
+      {{ props.tel && props.tel ? props.tel : props.user.tel }}</b>
+    </div>
     <div
       class="min-h-[30px] w-full bg-white border border-white border-solid rounded-[15px] flex flex-row justify-between items-center pl-5 text-lg status"
     >

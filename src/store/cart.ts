@@ -15,20 +15,76 @@ type TypeCart = TypeCartObject[]
 const initialState: TypeCart = []
 
 export const useCartStore = defineStore('cart', {
-  state: () => initialState,
+  // state: () => {return []},
+  state: () => {return {cart:[]}},
   getters: {
     IsCart: (state) => state,
   },
   actions: {
     clear() {
-      this.$patch(initialState)
+      this.$patch({cart: initialState})
     },
-    
+    add(productID) {
+      this.cart.push({ ...productID, quantity: 1 })
+    },
+  
     set(cart: TypeCart) {
-      this.$patch(cart)
+      //this.cart =[...cart]
+      // this.$patch([...cart])
+       
+      this.$patch({cart: cart}) 
     },
   },
 })
+
+
+
+
+
+// export type TypeCartObject = {
+//   image: null | string
+//   type: null | string
+//   name: null | string
+//   description: null | string
+//   price: null | number
+//   id: null | number
+//   quantity?: null | number
+// }
+
+// type TypeCart = TypeCartObject[]
+
+// const initialState: TypeCart = []
+
+// export const useCartStore = defineStore('cart', {
+//   // state: () => {return []},
+//   state: () => {return {cart:[]}},
+//   getters: {
+//     IsCart: (state) => state,
+//   },
+//   actions: {
+//     clear() {
+//       this.$patch({cart: initialState})
+//     },
+//     add(obj: TypeCartObject) {
+//       this.cart.push(obj)
+//     },
+//     set(cart: TypeCart) {
+//       //this.cart =[...cart]
+//       // this.$patch([...cart])
+       
+//       this.$patch({cart: cart}) 
+//     },
+//   },
+// })
+
+
+
+
+
+
+
+
+
 
 // export type TypeCart = [
 //   {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CircleX } from 'lucide-vue-next'
-import { inject, reactive, ref, watch } from 'vue'
+import { computed, inject, reactive, ref, watch, watchEffect } from 'vue'
 import CartItem from './CartItem.vue'
 import InfoBlock from './InfoBlock.vue'
 import { useCartStore } from '../store/cart'
@@ -19,41 +19,49 @@ type TypeCart = {
   quantity: number
 }
 
+// const itemsCart = ref([])
 const itemsCart = ref<TypeCart[]>([])
+
+// itemsCart.value = JSON.parse(localStorage.getItem('itemCart'))
+
 
 //Подписка на товары из Pinia
 const cartStore = useCartStore()
-itemsCart.value = cartStore.$state
+itemsCart.value = cartStore.$state.cart
+// console.log(itemsCart.value)
 
-// watch(cartStore.$state, () => {
-//   if (!cartStore.$state) {
-//       return;
-//     }
-//     itemsCart.value = cartStore.$state
-//   }, {deep: true})
+// watch(cartStore.$state.cart, () => {
+//   // if (!cartStore.$state.cart) {
+//   //     return;
+//   //   }
+//     itemsCart.value = cartStore.$state.cart
+//   }, )
 
-// // Функция удаления товара из корзины и Pinia
-//   const handlelDeleteClick = id => {
-//     // const cartStore = useCartStore()
-//     // const arrayItem = cartStore.$state
-//     const arrayItem = itemsCart.value.map(item => ({ ...item }));
-//     console.log(JSON.parse(JSON.stringify(arrayItem)))
+// Функция удаления товара из корзины и Pinia
+  const handlelDeleteClick = id => {
+    // const cartStore = useCartStore()
+    // const arrayItem = cartStore.$state
+    const arrayItem = itemsCart.value.map(item => ({ ...item }));
+    console.log(JSON.parse(JSON.stringify(arrayItem)))
 
-//     //получаю новый массив исключающий объект по id
-//     const newArray = arrayItem.filter(item => item.id !== id);
-//     console.log(JSON.parse(JSON.stringify(newArray)))
+    //получаю новый массив исключающий объект по id
+    const newArray = arrayItem.filter(item => item.id !== id);
+    console.log(JSON.parse(JSON.stringify(newArray)))
 
-//     //записываю новый массив товаров в Pinia после каждого удаления товара
-//     cartStore.set(newArray);
-//     itemsCart.value = newArray;
-//   };
+    //записываю новый массив товаров в Pinia после каждого удаления товара
+    // localStorage.setItem('itemCart', JSON.stringify(newArray));
+
+    cartStore.set(newArray);
+    
+    itemsCart.value = newArray;
+  };
 
 // Функция увеличения и уменьшения колличества товара в корзине и Pinia
 const handlelQuantityClick = (id, action) => {
   //Делаю копию массива
   // const newArray = [...items];
   const newArray = itemsCart.value.map((item) => ({ ...item }))
-  // console.log(newArrayInCart);
+  // console.log(newArray);
 
   //Достаю объект из массива
   const product = newArray.find((item) => item.id === id)
@@ -65,22 +73,27 @@ const handlelQuantityClick = (id, action) => {
     return
   }
   // Записываю копию массива в Pinia
+  // localStorage.setItem('itemCart', JSON.stringify(newArray));
+
   cartStore.set(newArray)
+  
   itemsCart.value = newArray
 }
 
-// //Логика подсчета общей стоимости с учетом quantity
+//Логика подсчета общей стоимости с учетом quantity
 const arrayPrices = itemsCart.value.map(item => item.price * item.quantity).map(parseFloat);
 console.log(arrayPrices);
 const totalPrice = arrayPrices.reduce((sum, current) => sum + current, 0);
-console.log(totalPrice)
+// console.log(totalPrice)
 
 const isLoading = ref(false)
+//Одновременно оформление заказа и регистрация нового покупателя
 const formData = reactive({
-  nameUser: '',
+  fullName: '',
   tel: '',
-  // pay: '',
-  // delivery: '',
+  role: 'client',
+  // email: '',
+  // password: '',
 })
 
 //Формирую массив из объектов в которых присутствуют только необходимые поля
@@ -91,19 +104,18 @@ const arrayProducts = itemsCart.value.map((item) => ({
   price: item.price,
 }))
 // console.log(arrayProducts);
-//arrayOrder(заказ) это объект не массив
-const arrayOrder = {
-  ...formData,
-  total_price: totalPrice,
-  // user_id: useSelector(getUser)?.data.id,
-  goods: [...arrayProducts],
-}
-console.log(arrayOrder)
+
+
 const navigate = useRouter()
 const orderSet = async () => {
   isLoading.value = true
   try {
-    const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/orders', arrayOrder)
+    // arrayOrder помещаю в orderSet иначе поля из ...formData не отправятся на бэк
+    const arrayOrder = {
+  ...formData,
+  goods: [...arrayProducts, {total_price: totalPrice}],
+}
+    const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/register', arrayOrder)
     // console.log(result.data)
   } catch (error) {
     console.log(error)
@@ -112,7 +124,6 @@ const orderSet = async () => {
     navigate.push('/ordersPage')
   }
 }
-// cartStore.clear()
 </script>
 
 <template>
@@ -155,8 +166,9 @@ const orderSet = async () => {
         <div>{{ totalPrice }} руб.</div>
       </div>
       <form @submit.prevent="" class="flex flex-col gap-3 bg-red-200 mt-3">
+      
         <input
-          v-mode="formData.nameUser"
+          v-model="formData.fullName"
           type="text"
           placeholder="Введите ваше имя"
           class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none pl-1"
@@ -169,25 +181,14 @@ const orderSet = async () => {
           class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none pl-1"
         />
 
-        <!-- <select v-model="formData.pay"
-          class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none active-outline-color-red"
-        >
-          <option disabled value="">Выберите способ оплаты:</option>
-          <option>Карта</option>
-          <option>Наличные</option>
-          <option>Счет</option>
-        </select>
-
-        <select
-          v-model="formData.delivery"
-          class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none"
-        >
-          <option disabled value="">Выберите способ доставки:</option>
-          <option>Самовывоз</option>
-          <option>СДЭК</option>
-        </select> -->
+        <!-- <input
+          v-model="formData.email"
+          type="text"
+          placeholder="Введите ваш email"
+          class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none pl-1"
+        /> -->
         <button
-          @click="orderSet(); drawerCart = !drawerCart"
+          @click="orderSet(); cartStore.clear(); drawerCart = !drawerCart"
           type="submit"
           class="w-ful h-[50px] bg-red-300 border-2 border-white border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
         >
