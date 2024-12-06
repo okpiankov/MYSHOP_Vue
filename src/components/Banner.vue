@@ -8,7 +8,7 @@
     <div class="flex justify-center items-center border-b border-b-gray-300 w-[85%] h-[5px]">
       <div class="w-full h-[2px] overflow-x-auto relative rounded-lg shadow-lg z-20">
         <div
-          class="absolute inset-0 bg-gradient-to-r from-white to-white animate-scroll rounded-lg"
+          class="absolute inset-0 bg-gradient-to-r from-white to-purple-500 animate-scroll rounded-lg"
         ></div>
       </div>
     </div>

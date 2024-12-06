@@ -36,36 +36,14 @@ onMounted(async () => {
   }
 })
 
-// // Запись данных карточек товаров в Pinia:
-// // Обязательно прописывать  .$state!!!
+// Запись данных карточек товаров в Pinia:
+const cartStore = useCartStore()
 
-// const cartStore = useCartStore()
-// const prevArrayItems = cartStore.$state.cart
-// // console.log(prevArrayItems);
-
-// const handleAddItemId = () => {
-//   if (!prevArrayItems) {
-//     const item = [{ ...product.value, quantity: 1 }]
-//     cartStore.set(item)
-    
-//     return
-//   }
-//   // console.log(prevArrayItems);
-
-//   const ItemInPrevArray = prevArrayItems.find((item) => item.id === product.value?.id)
-//   // console.log(ItemInPrevArray);
-
-//   if (ItemInPrevArray) {
-//     return
-//   }
-//   const item = [...prevArrayItems, { ...product.value, quantity: 1 }]
-//   cartStore.set(item)
+// const handleAddItemId = (product: TypeProduct | null) => {
+//     cartStore.add(product)
 // }
 
-//Почему то не надо подписываться на id в отличии от react useEffect
-// watch(id, () => {
-//   функция_запроса(id)
-// })
+
 </script>
 
 <template>
@@ -103,7 +81,7 @@ onMounted(async () => {
         </div>
       </div>
       <button
-        @click="handleAddItemId()"
+        @click="cartStore.add(product)"
         class="max-w-[260px] h-[50px] bg-red-300 border-2 border-red-300 border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
       >
         Добавить в корзину
@@ -234,3 +212,35 @@ onMounted(async () => {
   }
 }
 </style> -->
+
+
+<!-- // // Запись данных карточек товаров в Pinia:
+// // Обязательно прописывать  .$state!!!
+
+// const cartStore = useCartStore()
+// const prevArrayItems = cartStore.$state.cart
+// // console.log(prevArrayItems);
+
+// const handleAddItemId = () => {
+//   if (!prevArrayItems) {
+//     const item = [{ ...product.value, quantity: 1 }]
+//     cartStore.set(item)
+    
+//     return
+//   }
+//   // console.log(prevArrayItems);
+
+//   const ItemInPrevArray = prevArrayItems.find((item) => item.id === product.value?.id)
+//   // console.log(ItemInPrevArray);
+
+//   if (ItemInPrevArray) {
+//     return
+//   }
+//   const item = [...prevArrayItems, { ...product.value, quantity: 1 }]
+//   cartStore.set(item)
+// }
+
+//Почему то не надо подписываться на id в отличии от react useEffect
+// watch(id, () => {
+//   функция_запроса(id)
+// }) -->

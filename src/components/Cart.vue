@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CircleX } from 'lucide-vue-next'
-import { computed, inject, reactive, ref, watch, watchEffect } from 'vue'
+import { computed, inject, reactive, ref, watch } from 'vue'
 import CartItem from './CartItem.vue'
 import InfoBlock from './InfoBlock.vue'
 import { useCartStore } from '../store/cart'
@@ -18,81 +18,55 @@ type TypeCart = {
   description: string
   quantity: number
 }
-
-// const itemsCart = ref([])
 const itemsCart = ref<TypeCart[]>([])
-
-// itemsCart.value = JSON.parse(localStorage.getItem('itemCart'))
-
 
 //Подписка на товары из Pinia
 const cartStore = useCartStore()
-itemsCart.value = cartStore.$state.cart
-// console.log(itemsCart.value)
+// Через storeToRefs не работает!!!
+const { cart, total_cost } = storeToRefs(cartStore)
+// itemsCart.value = cart
+// itemsCart.value = cartStore.$state.cart
+console.log(cart)
 
-// watch(cartStore.$state.cart, () => {
-//   // if (!cartStore.$state.cart) {
-//   //     return;
-//   //   }
+
+watch(
+ cart,
+  (cart) => {
+    itemsCart.value = cart
+  }, { deep: true, immediate: true }
+)
+
+//Подписка на товары из Pinia обязательно нужно возвращать стор () => cartStore.$state.cart и { immediate: true }
+// watch(
+//   () => cartStore.$state.cart,
+//   () => {
 //     itemsCart.value = cartStore.$state.cart
-//   }, )
+//   },
+//   { deep: true, immediate: true },
+// )
 
 // Функция удаления товара из корзины и Pinia
-  const handlelDeleteClick = id => {
-    // const cartStore = useCartStore()
-    // const arrayItem = cartStore.$state
-    const arrayItem = itemsCart.value.map(item => ({ ...item }));
-    console.log(JSON.parse(JSON.stringify(arrayItem)))
-
-    //получаю новый массив исключающий объект по id
-    const newArray = arrayItem.filter(item => item.id !== id);
-    console.log(JSON.parse(JSON.stringify(newArray)))
-
-    //записываю новый массив товаров в Pinia после каждого удаления товара
-    // localStorage.setItem('itemCart', JSON.stringify(newArray));
-
-    cartStore.set(newArray);
-    
-    itemsCart.value = newArray;
-  };
+// Почти вся логика функций удаления и изменения количества товара ушла в стор Pinia
+const handlelDeleteClick = (id) => {
+  cartStore.delete(id)
+}
 
 // Функция увеличения и уменьшения колличества товара в корзине и Pinia
 const handlelQuantityClick = (id, action) => {
-  //Делаю копию массива
-  // const newArray = [...items];
-  const newArray = itemsCart.value.map((item) => ({ ...item }))
-  // console.log(newArray);
-
-  //Достаю объект из массива
-  const product = newArray.find((item) => item.id === id)
-  // console.log(product)
-
-  //Обращаюсь в объекте к полю quantity
-  product.quantity = action === 'add' ? product.quantity + 1 : product.quantity - 1
-  if (product.quantity <= 0) {
-    return
+  if (action === 'add') {
+    cartStore.increment(id)
+  } else {
+    cartStore.decrement(id)
   }
-  // Записываю копию массива в Pinia
-  // localStorage.setItem('itemCart', JSON.stringify(newArray));
-
-  cartStore.set(newArray)
-  
-  itemsCart.value = newArray
 }
-
-//Логика подсчета общей стоимости с учетом quantity
-const arrayPrices = itemsCart.value.map(item => item.price * item.quantity).map(parseFloat);
-console.log(arrayPrices);
-const totalPrice = arrayPrices.reduce((sum, current) => sum + current, 0);
-// console.log(totalPrice)
 
 const isLoading = ref(false)
 //Одновременно оформление заказа и регистрация нового покупателя
 const formData = reactive({
   fullName: '',
   tel: '',
+  email: '',
   role: 'client',
-  // email: '',
   // password: '',
 })
 
@@ -103,18 +77,19 @@ const arrayProducts = itemsCart.value.map((item) => ({
   quantity: item.quantity,
   price: item.price,
 }))
-// console.log(arrayProducts);
-
+console.log(arrayProducts);
 
 const navigate = useRouter()
 const orderSet = async () => {
   isLoading.value = true
   try {
+
+    
     // arrayOrder помещаю в orderSet иначе поля из ...formData не отправятся на бэк
     const arrayOrder = {
-  ...formData,
-  goods: [...arrayProducts, {total_price: totalPrice}],
-}
+      ...formData,
+      goods: [...arrayProducts, { total_price: total_cost }],
+    }
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/register', arrayOrder)
     // console.log(result.data)
   } catch (error) {
@@ -163,10 +138,9 @@ const orderSet = async () => {
     <div class="mb-4">
       <div class="flex justify-start gap-4 text-[22px]">
         <div>Итого:</div>
-        <div>{{ totalPrice }} руб.</div>
+        <div>{{ total_cost }} руб.</div>
       </div>
       <form @submit.prevent="" class="flex flex-col gap-3 bg-red-200 mt-3">
-      
         <input
           v-model="formData.fullName"
           type="text"
@@ -181,14 +155,17 @@ const orderSet = async () => {
           class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none pl-1"
         />
 
-        <!-- <input
+        <input
           v-model="formData.email"
           type="text"
           placeholder="Введите ваш email"
           class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none pl-1"
-        /> -->
+        />
         <button
-          @click="orderSet(); cartStore.clear(); drawerCart = !drawerCart"
+          @click="
+            orderSet();
+            drawerCart = !drawerCart
+          "
           type="submit"
           class="w-ful h-[50px] bg-red-300 border-2 border-white border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
         >
@@ -206,11 +183,15 @@ const orderSet = async () => {
   animation: showRight 0.8s;
   transition: animation 0.5s ease-in-out;
   z-index: 31;
+}
+@keyframes showRight {
+  from {
+    right: -100%;
   }
-  @keyframes showRight {
-  from {right:-100%;}
-  to {right:0;}
+  to {
+    right: 0;
   }
+}
 </style>
 
 <!-- <template>
@@ -312,3 +293,51 @@ button {
     >
       Оформить заказ
     </button> -->
+
+<!-- const handlelDeleteClick = id => {
+      // const cartStore = useCartStore()
+      // const arrayItem = cartStore.$state
+      const arrayItem = itemsCart.value.map(item => ({ ...item }));
+      console.log(JSON.parse(JSON.stringify(arrayItem)))
+  
+      //получаю новый массив исключающий объект по id
+      const newArray = arrayItem.filter(item => item.id !== id);
+      console.log(JSON.parse(JSON.stringify(newArray)))
+  
+      //записываю новый массив товаров в Pinia после каждого удаления товара
+      // localStorage.setItem('itemCart', JSON.stringify(newArray));
+  
+      cartStore.set(newArray);
+      
+      itemsCart.value = newArray;
+    };
+  
+  // Функция увеличения и уменьшения колличества товара в корзине и Pinia
+  const handlelQuantityClick = (id, action) => {
+    //Делаю копию массива
+    // const newArray = [...items];
+    const newArray = itemsCart.value.map((item) => ({ ...item }))
+    // console.log(newArray);
+  
+    //Достаю объект из массива
+    const product = newArray.find((item) => item.id === id)
+    // console.log(product)
+  
+    //Обращаюсь в объекте к полю quantity
+    product.quantity = action === 'add' ? product.quantity + 1 : product.quantity - 1
+    if (product.quantity <= 0) {
+      return
+    }
+    // Записываю копию массива в Pinia
+    // localStorage.setItem('itemCart', JSON.stringify(newArray));
+  
+    cartStore.set(newArray)
+    
+    itemsCart.value = newArray
+  }
+  
+  //Логика подсчета общей стоимости с учетом quantity
+  const arrayPrices = itemsCart.value.map(item => item.price * item.quantity).map(parseFloat);
+  console.log(arrayPrices);
+  const totalPrice = arrayPrices.reduce((sum, current) => sum + current, 0);
+  // console.log(totalPrice) -->

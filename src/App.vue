@@ -8,6 +8,7 @@ import LoginForm from './components/LoginForm.vue'
 import { useCartStore } from './store/cart'
 import { useAuthStore } from './store/auth'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import Banner from './components/Banner.vue'
 
 const drawerCart = ref(false)
@@ -24,6 +25,8 @@ const closeRightMenu = () => {
 // useAuthStore().$state и useCartStore().$state не верно!, так работаю с состоянием, а не стором
 const cartStore = useCartStore()
 const authStore = useAuthStore()
+// const { cart } = storeToRefs(cartStore)
+// console.log(cart)
 const navigate = useRouter()
 
 const Login = () => {
@@ -101,7 +104,6 @@ const Login = () => {
   color: white;
   text-align: center;
   margin-top: 20px;
-
 }
 .container {
   width: 85%;
@@ -148,7 +150,26 @@ const Login = () => {
       div {
         display: flex;
         .gem {
-          color: rgb(230, 0, 255);
+          width: 30px;
+          height: 30px;
+          // color: rgb(230, 0, 255);
+          animation: show 5s infinite;
+        }
+        @keyframes show {
+          0%, 100% {
+            color: white;
+            opacity: 1;
+            rotate: -38deg;
+            background-color:rgb(230, 0, 255);
+            border-radius: 15px;
+            box-shadow: 0 -17px 12px 22px rgb(230, 0, 255);
+          }
+          50% {
+            color: rgb(245, 153, 255);
+            opacity: 0.1;
+            rotate: 0deg;
+
+          }
         }
       }
     }
@@ -174,7 +195,7 @@ const Login = () => {
     border: 1px solid #fca3a3;
     box-shadow: 0 0 20px 30px #fca3a3;
     border-radius: 37px;
-    background-color: #ffc4c4;  
+    background-color: #ffc4c4;
     display: flex;
     // flex-direction: row;
     flex-direction: column;
