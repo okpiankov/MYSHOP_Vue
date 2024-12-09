@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIsLoadingStore, useAuthStore } from '../store/auth'
-import { useRoute } from 'vue-router'
 
 // Передача через emit значения реактивной переменной "popUpAuth = !popUpAuth" т.е true
 // Все значения(и транзитные и текущие) передаются через 1 emit

@@ -2,7 +2,7 @@
 // import products from '../service/data.ts'
 import CardMini from '../components/CardMini.vue'
 import axios from 'axios'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useCartStore } from '../store/cart'
 import { useRoute } from 'vue-router'
 
@@ -11,9 +11,10 @@ type TypeProducts = [
     image: string
     type: string
     name: string
-    price: string
+    price: number
     description: string
     id: number
+    quantity?: number
   },
 ]
 
@@ -50,6 +51,18 @@ watch(
   // Магия, ищи сейчас, не лениво:
   { immediate: true },
 )
+
+// Запись данных карточек товаров в Pinia:
+const cartStore = useCartStore()
+
+const handleAddItem = (id: number ) => {
+  // Ищу продукт по id  в массиве всех продуктов
+  const product = products.value.find((item) => item.id === id)
+  console.log(product)
+  if (product) {
+    cartStore.add(product)
+  }
+}
 </script>
 
 <template>

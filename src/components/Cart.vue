@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CircleX } from 'lucide-vue-next'
-import { computed, inject, reactive, ref, watch } from 'vue'
+import { inject, reactive, ref } from 'vue'
 import CartItem from './CartItem.vue'
 import InfoBlock from './InfoBlock.vue'
 import { useCartStore } from '../store/cart'
@@ -10,49 +10,22 @@ import { useRouter } from 'vue-router'
 
 const drawerCart = inject('drawerCart')
 
-type TypeCart = {
-  id: number
-  name: string
-  price: string
-  image: string
-  description: string
-  quantity: number
-}
-const itemsCart = ref<TypeCart[]>([])
-
 //Подписка на товары из Pinia
+//Все данные для корзины беру сразу из стора Pinia тк они уже туда записаны
+//Использую storeToRefs для получения(подписки) реактивных данных из Pinia
+//Обращаюсь к state cart в разных ситуациях либо просто cart или cart.value
 const cartStore = useCartStore()
-// Через storeToRefs не работает!!!
 const { cart, total_cost } = storeToRefs(cartStore)
-// itemsCart.value = cart
-// itemsCart.value = cartStore.$state.cart
-console.log(cart)
-
-
-watch(
- cart,
-  (cart) => {
-    itemsCart.value = cart
-  }, { deep: true, immediate: true }
-)
-
-//Подписка на товары из Pinia обязательно нужно возвращать стор () => cartStore.$state.cart и { immediate: true }
-// watch(
-//   () => cartStore.$state.cart,
-//   () => {
-//     itemsCart.value = cartStore.$state.cart
-//   },
-//   { deep: true, immediate: true },
-// )
+// console.log(cart)
 
 // Функция удаления товара из корзины и Pinia
 // Почти вся логика функций удаления и изменения количества товара ушла в стор Pinia
-const handlelDeleteClick = (id) => {
+const handlelDeleteClick = (id: number ) => {
   cartStore.delete(id)
 }
 
 // Функция увеличения и уменьшения колличества товара в корзине и Pinia
-const handlelQuantityClick = (id, action) => {
+const handlelQuantityClick = (id: number, action: string) => {
   if (action === 'add') {
     cartStore.increment(id)
   } else {
@@ -70,28 +43,28 @@ const formData = reactive({
   // password: '',
 })
 
-//Формирую массив из объектов в которых присутствуют только необходимые поля
-const arrayProducts = itemsCart.value.map((item) => ({
-  id: item.id,
-  name: item.name,
-  quantity: item.quantity,
-  price: item.price,
-}))
-console.log(arrayProducts);
-
 const navigate = useRouter()
+
 const orderSet = async () => {
   isLoading.value = true
   try {
+    //Формирую массив из объектов в которых присутствуют только необходимые поля
+    const arrayProducts = cart.value.map((item) => ({
+      id: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+    }))
+    console.log(arrayProducts)
 
-    
     // arrayOrder помещаю в orderSet иначе поля из ...formData не отправятся на бэк
     const arrayOrder = {
       ...formData,
-      goods: [...arrayProducts, { total_price: total_cost }],
+      goods: [...arrayProducts],
+      total_price: total_cost.value,
     }
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/register', arrayOrder)
-    // console.log(result.data)
+    console.log(result.data)
   } catch (error) {
     console.log(error)
   } finally {
@@ -114,7 +87,7 @@ const orderSet = async () => {
       <div>КОРЗИНА</div>
     </div>
     <CartItem
-      v-for="item in itemsCart"
+      v-for="item in cart"
       :key="item.id"
       :name="item.name"
       :price="item.price"
@@ -126,7 +99,7 @@ const orderSet = async () => {
       @handlelQuantityClick="handlelQuantityClick"
     />
 
-    <div v-if="itemsCart.length === 0" class="gap-5 text-[22px]">
+    <div v-if="cart.length === 0" class="gap-5 text-[22px]">
       <InfoBlock
         title="Корзина пустая"
         description="Добавьте вашу мечту"
@@ -164,12 +137,12 @@ const orderSet = async () => {
         <button
           @click="
             orderSet();
-            drawerCart = !drawerCart
+            drawerCart = !drawerCart;
+            cartStore.clear()
           "
           type="submit"
           class="w-ful h-[50px] bg-red-300 border-2 border-white border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
         >
-          <!-- <RouterLink to="/orderPageAllUsers">Оформить заказ</RouterLink> -->
           Оформить заказ
         </button>
       </form>
@@ -284,60 +257,24 @@ button {
 }
 </style> -->
 
-<!-- <div class="flex gap-5 text-[22px]">
-      <span> Итого:</span>
-      <b> {{ result }} руб.</b>
-    </div>
-    <button
-      class="w-ful h-[50px] bg-red-300 border-2 border-white border-solid rounded-3xl cursor-pointer text-white text-2xl hover:border-black hover:text-black"
-    >
-      Оформить заказ
-    </button> -->
+<!-- // Дополнительная локальная реактивная переменная не нужна тк все данные для корзины беру из Pinia
+   // const itemsCart = ref<TypeCart[]>([]) 
+// itemsCart.value = cart
+// itemsCart.value = cartStore.$state.cart
+// console.log(cart)
 
-<!-- const handlelDeleteClick = id => {
-      // const cartStore = useCartStore()
-      // const arrayItem = cartStore.$state
-      const arrayItem = itemsCart.value.map(item => ({ ...item }));
-      console.log(JSON.parse(JSON.stringify(arrayItem)))
-  
-      //получаю новый массив исключающий объект по id
-      const newArray = arrayItem.filter(item => item.id !== id);
-      console.log(JSON.parse(JSON.stringify(newArray)))
-  
-      //записываю новый массив товаров в Pinia после каждого удаления товара
-      // localStorage.setItem('itemCart', JSON.stringify(newArray));
-  
-      cartStore.set(newArray);
-      
-      itemsCart.value = newArray;
-    };
-  
-  // Функция увеличения и уменьшения колличества товара в корзине и Pinia
-  const handlelQuantityClick = (id, action) => {
-    //Делаю копию массива
-    // const newArray = [...items];
-    const newArray = itemsCart.value.map((item) => ({ ...item }))
-    // console.log(newArray);
-  
-    //Достаю объект из массива
-    const product = newArray.find((item) => item.id === id)
-    // console.log(product)
-  
-    //Обращаюсь в объекте к полю quantity
-    product.quantity = action === 'add' ? product.quantity + 1 : product.quantity - 1
-    if (product.quantity <= 0) {
-      return
-    }
-    // Записываю копию массива в Pinia
-    // localStorage.setItem('itemCart', JSON.stringify(newArray));
-  
-    cartStore.set(newArray)
-    
-    itemsCart.value = newArray
-  }
-  
-  //Логика подсчета общей стоимости с учетом quantity
-  const arrayPrices = itemsCart.value.map(item => item.price * item.quantity).map(parseFloat);
-  console.log(arrayPrices);
-  const totalPrice = arrayPrices.reduce((sum, current) => sum + current, 0);
-  // console.log(totalPrice) -->
+// watch(
+//  cart,
+//   (cart) => {
+//     itemsCart.value = cart
+//   }, { deep: true, immediate: true } 
+// )
+
+//Подписка на товары из Pinia обязательно нужно возвращать стор () => cartStore.$state.cart и { immediate: true }
+// watch(
+//   () => cartStore.$state.cart,
+//   () => {
+//     itemsCart.value = cartStore.$state.cart
+//   },
+//   { deep: true, immediate: true },
+// ) -->

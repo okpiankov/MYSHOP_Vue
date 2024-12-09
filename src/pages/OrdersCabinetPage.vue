@@ -9,7 +9,7 @@ type TypeGoods = [
     id: number
     name: string | null
     quantity: string | null
-    price: string | null
+    price: number | null
   },
 ]
 type TypeOrder = {

@@ -9,9 +9,10 @@ type TypeProduct = {
   image: string
   type: string
   name: string
-  price: string
+  price: number
   description: string
   id: number
+  quantity?: number
 }
 
 const id = useRoute().params.id
@@ -36,14 +37,12 @@ onMounted(async () => {
   }
 })
 
-// Запись данных карточек товаров в Pinia:
+// Запись данных карточки товаров в Pinia  @click="cartStore.add(product)":
 const cartStore = useCartStore()
 
 // const handleAddItemId = (product: TypeProduct | null) => {
 //     cartStore.add(product)
 // }
-
-
 </script>
 
 <template>

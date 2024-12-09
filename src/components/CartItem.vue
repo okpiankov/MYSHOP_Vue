@@ -4,7 +4,7 @@ import { Plus, Minus, Trash2 } from 'lucide-vue-next'
 type TypeProducts = {
   image: string
   name: string
-  price: string
+  price: number
   description: string
   id: number
   quantity: number

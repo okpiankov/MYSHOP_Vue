@@ -1,58 +1,58 @@
 
-// Функция записи в localStorage товара из массива приходящего с сервера в котором хранятся все товары 
-export const handleAddItem = (id, products) => {
-  // Ищу продукт по id  в массиве всех продуктов
-  const productID = products.find(item => item.id === id);
+// // Функция записи в localStorage товара из массива приходящего с сервера в котором хранятся все товары 
+// export const handleAddItem = (id, products) => {
+//   // Ищу продукт по id  в массиве всех продуктов
+//   const productID = products.find(item => item.id === id);
 
-  // Получю для проверки из localStorage []  по ключу 'itemCart' данные в формате JSON
-  const prevArrayItems = localStorage.getItem('itemCart');
+//   // Получю для проверки из localStorage []  по ключу 'itemCart' данные в формате JSON
+//   const prevArrayItems = localStorage.getItem('itemCart');
 
-  // Проверяю и записываю ЕДИНОЖДЫ в LS по ключу 'itemCart'  массив с объектом найденным по id
-  if (!prevArrayItems) {
+//   // Проверяю и записываю ЕДИНОЖДЫ в LS по ключу 'itemCart'  массив с объектом найденным по id
+//   if (!prevArrayItems) {
     
-    const item = [{ ...productID, quantity: 1 }];
-    localStorage.setItem('itemCart', JSON.stringify(item));
-    return;
-  }
+//     const item = [{ ...productID, quantity: 1 }];
+//     localStorage.setItem('itemCart', JSON.stringify(item));
+//     return;
+//   }
 
-  const prevArrayCarts = JSON.parse(prevArrayItems);
+//   const prevArrayCarts = JSON.parse(prevArrayItems);
 
-  // Проверяю есть ли такой же объект в массиве по id
-  const ItemInPrevArray = prevArrayCarts.find(item => item.id === id);
-  console.log(ItemInPrevArray);
+//   // Проверяю есть ли такой же объект в массиве по id
+//   const ItemInPrevArray = prevArrayCarts.find(item => item.id === id);
+//   console.log(ItemInPrevArray);
 
-  if (ItemInPrevArray) {
-    return;
-  }
-  // Дозаписываю  в localStorage объект которого нет в ls по id через {...productID}
-  const item = [...prevArrayCarts, { ...productID, quantity: 1 }];
-  localStorage.setItem('itemCart', JSON.stringify(item));
-}; 
+//   if (ItemInPrevArray) {
+//     return;
+//   }
+//   // Дозаписываю  в localStorage объект которого нет в ls по id через {...productID}
+//   const item = [...prevArrayCarts, { ...productID, quantity: 1 }];
+//   localStorage.setItem('itemCart', JSON.stringify(item));
+// }; 
 
 
-// Функция записи в localStorage конкретного товара как объекта приходящего с сервера
-export const handleAddItemId = (product) => {
-  const prevArrayItems = localStorage.getItem('itemCart');
+// // Функция записи в localStorage конкретного товара как объекта приходящего с сервера
+// export const handleAddItemId = (product) => {
+//   const prevArrayItems = localStorage.getItem('itemCart');
 
-  if (!prevArrayItems) {
-    const item = [{ ...product, quantity: 1 }];
-    localStorage.setItem('itemCart', JSON.stringify(item));
-    return;
-  }
-  console.log(prevArrayItems);
+//   if (!prevArrayItems) {
+//     const item = [{ ...product, quantity: 1 }];
+//     localStorage.setItem('itemCart', JSON.stringify(item));
+//     return;
+//   }
+//   console.log(prevArrayItems);
 
-  const prevArrayCarts = JSON.parse(prevArrayItems);
+//   const prevArrayCarts = JSON.parse(prevArrayItems);
 
-  const ItemInPrevArray = prevArrayCarts.find(item => item.id === product.id);
-  console.log(ItemInPrevArray);
+//   const ItemInPrevArray = prevArrayCarts.find(item => item.id === product.id);
+//   console.log(ItemInPrevArray);
 
-  if (ItemInPrevArray) {
-    return;
-  }
+//   if (ItemInPrevArray) {
+//     return;
+//   }
 
-  const item = [...prevArrayCarts, { ...product, quantity: 1 }];
-  localStorage.setItem('itemCart', JSON.stringify(item));
-};
+//   const item = [...prevArrayCarts, { ...product, quantity: 1 }];
+//   localStorage.setItem('itemCart', JSON.stringify(item));
+// };
 
 
 // // Функция удаления товара из корзины и localStorage

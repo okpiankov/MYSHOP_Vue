@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import Card from '../components/CardMini.vue'
+import { useCartStore } from '@/store/cart';
 import axios from 'axios'
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import CardMini from '../components/CardMini.vue';
 
 type TypeProducts = [
   {
     image: string
     type: string
     name: string
-    price: string
+    price: number
     description: string
     id: number
+    quantity?: number
   },
 ]
 
@@ -42,12 +44,24 @@ const getProducts = async () => {
 onMounted(getProducts)
 
 watch(() => type.query.type, getProducts)
+
+// Запись данных карточек товаров в Pinia:
+const cartStore = useCartStore()
+
+const handleAddItem = (id: number ) => {
+  // Ищу продукт по id  в массиве всех продуктов
+  const product = products.value.find((item) => item.id === id)
+  console.log(product)
+  if (product) {
+    cartStore.add(product)
+  } 
+}
 </script>
 
 <template>
   <div v-if="isLoading" class="loading">Загрузка...</div>
   <section>
-    <Card
+    <CardMini
       v-for="item in products"
       :key="item.id"
       :image="item.image"
@@ -55,6 +69,7 @@ watch(() => type.query.type, getProducts)
       :price="item.price"
       :description="item.description"
       :id="item.id"
+      @handleAddItem="handleAddItem(item.id)"
     />
   </section>
 </template>

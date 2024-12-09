@@ -2,20 +2,19 @@
 // import products from '../service/data.ts'
 import CardMini from '../components/CardMini.vue'
 import axios from 'axios'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useCartStore } from '../store/cart'
-import { useAuthStore } from '../store/auth'
-import { storeToRefs } from 'pinia'
-// import { handleAddItem } from '../service/localStorage'
+
 
 type TypeProducts = [
   {
     image: string
     type: string
     name: string
-    price: string
+    price: number
     description: string
-    id: number 
+    id: number
+    quantity?: number
   },
 ]
 
@@ -39,16 +38,14 @@ onMounted(async () => {
 // Запись данных карточек товаров в Pinia:
 const cartStore = useCartStore()
 
-const handleAddItem = (id: number | null) => {
+const handleAddItem = (id: number ) => {
   // Ищу продукт по id  в массиве всех продуктов
   const product = products.value.find((item) => item.id === id)
   console.log(product)
   if (product) {
     cartStore.add(product)
   }
-    
 }
-
 </script>
 
 <template>
@@ -117,35 +114,3 @@ watch(products.value, (products) => {
 // //authStore.$state.data.fullName  .$state зачем и с ним и без работает...?
 // console.log(JSON.parse(JSON.stringify(authStore.data.fullName))) -->
 
-
-<!-- // Получаю для проверки из Pinia  массив товаров
-// Обязательно прописывать  .$state!!!
-// const cartStore = useCartStore()
-// const prevArrayItems = cartStore.$state
-// const prevArrayItems = cartStore.$state.cart
-// console.log(prevArrayItems)
-
-// const handleAddItem = (id: number | null) => {
-//   // Ищу продукт по id  в массиве всех продуктов
-//   const productID = products.value.find((item) => item.id === id)
-//   console.log(productID)
-
-//   // Проверяю и записываю ЕДИНОЖДЫ в Pinia  массив с объектом найденным по id
-//   if (!prevArrayItems && productID !== undefined) {
-    
-//     cartStore.set([{ ...productID, quantity: 1 }])
-    
-//     return
-//   }
-//   // Проверяю есть ли такой же объект в массиве по id
-//   const ItemInPrevArray = prevArrayItems.find((item) => item.id === id)
-//   // console.log(ItemInPrevArray);
-
-//   if (ItemInPrevArray || productID === undefined) {
-//     return
-//   }
-//   // Дозаписываю  в  Pinia объект которого нет по id через {...productID}
-  
-//   cartStore.set([...prevArrayItems, { ...productID, quantity: 1 }])
-
-// } -->

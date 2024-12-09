@@ -4,7 +4,7 @@
 
 <template>
   <div class="left showLeft"></div>
-  <div class="right showRight"></div>
+  <div class="right showRight"></div> 
   <div class="container">
     <nav class="nav">
       <div class="decoration cabinet">Личный кабинет</div>
