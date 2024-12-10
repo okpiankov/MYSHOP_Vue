@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// import { storeToRefs } from 'pinia'
 import { RouterLink, RouterView } from 'vue-router'
 import { UserRound, ShoppingCart, Menu, Gem, LogOut } from 'lucide-vue-next'
 import DrawerRightMenu from './components/RightMenu.vue'
@@ -8,7 +9,6 @@ import LoginForm from './components/LoginForm.vue'
 import { useCartStore } from './store/cart'
 import { useAuthStore } from './store/auth'
 import { useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
 import Banner from './components/Banner.vue'
 
 const drawerCart = ref(false)
@@ -26,11 +26,11 @@ const closeRightMenu = () => {
 const cartStore = useCartStore()
 const authStore = useAuthStore()
 // const { cart } = storeToRefs(cartStore)
-// console.log(cart)
+// const { isAuth } = storeToRefs(authStore)
 const navigate = useRouter()
 
 const Login = () => {
-  if (authStore.$state.token === null) {
+  if (authStore.$state.token === '') {
     popUpLoginForm.value = !popUpLoginForm.value
   } else {
     navigate.push({ name: 'dataPage' })
@@ -56,26 +56,23 @@ const Login = () => {
         <div>8-800-777-77-77</div>
       </div>
       <div class="nav">
+        <!-- Обращаю внимание тк в authStore тип строка token:'' то и все последующие сравнения  -->
+        <!-- со сторокой .token !== '' верно!  .token !== null ошибка! -->
         <UserRound
           class="userRound"
-          @click="
-            Login()
-            // popUpLoginForm = !popUpLoginForm && authStore.token === null
-            //   ? popUpLoginForm = !popUpLoginForm
-            //   : navigate.push({ name: 'cabinetPage' })
-          "
-          :class="{ active: authStore.$state.token !== null }"
+          @click="Login()"
+          :class="{ active: authStore.$state.token !== '' }"
         />
         <ShoppingCart
           class="shoppingCart"
           @click="drawerCart = !drawerCart"
-          v-if="authStore.$state.token === null"
+          v-if="authStore.$state.token === ''"
           :class="{ active: cartStore.$state.cart.length !== 0 }"
         />
         <ShoppingCart
           class="shoppingCart"
           @click="navigate.push({ name: 'cartCabinetPage' })"
-          v-if="authStore.$state.token !== null"
+          v-if="authStore.$state.token !== ''"
           :class="{ active: cartStore.$state.cart.length !== 0 }"
         />
         <Menu class="menu" @click="drawerRightMenu = !drawerRightMenu" />
@@ -84,7 +81,7 @@ const Login = () => {
             authStore.clear();
             navigate.push({ name: 'home' })
           "
-          v-if="authStore.$state.token !== null"
+          v-if="authStore.$state.token !== ''"
           class="logOut"
         />
       </div>
@@ -156,11 +153,12 @@ const Login = () => {
           animation: show 5s infinite;
         }
         @keyframes show {
-          0%, 100% {
+          0%,
+          100% {
             color: white;
             opacity: 1;
             rotate: -38deg;
-            background-color:rgb(230, 0, 255);
+            background-color: rgb(230, 0, 255);
             border-radius: 15px;
             box-shadow: 0 -17px 12px 22px rgb(230, 0, 255);
           }
@@ -168,7 +166,6 @@ const Login = () => {
             color: rgb(245, 153, 255);
             opacity: 0.1;
             rotate: 0deg;
-
           }
         }
       }

@@ -13,7 +13,7 @@ type TypeProducts = [
     price: number
     description: string
     id: number
-    quantity?: number
+    quantity: number
   },
 ]
 
@@ -69,6 +69,7 @@ const handleAddItem = (id: number ) => {
       :price="item.price"
       :description="item.description"
       :id="item.id"
+      :quantity="item.quantity"
       @handleAddItem="handleAddItem(item.id)"
     />
   </section>

@@ -26,7 +26,7 @@ const login = async () => {
   IsLoadingStore.set(true)
   try {
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/auth', formData)
-    // console.log(result.data)
+    console.log(result.data)
 
     authStore.set(result.data)
     if (result.data.token) {
@@ -100,6 +100,7 @@ form {
     }
     &:focus {
       outline-color: #ea4335;
+      background-color: white;
     }
   }
   button {

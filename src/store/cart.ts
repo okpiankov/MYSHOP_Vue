@@ -7,7 +7,7 @@ export type TypeCartObject = {
   description: string
   price: number
   id: number
-  quantity?: number
+  quantity: number
 }
 
 type TypeCart = TypeCartObject[]
@@ -25,11 +25,7 @@ export const useCartStore = defineStore('cart', {
     //Логика подсчета общей стоимости с учетом quantity
     //total_cost: () => {...} через : не верно!
     total_cost(): number {
-      const arrayPrices = this.cart.map((item) =>
-        typeof item.price === 'number' && typeof item.quantity === 'number'
-          ? item.price * item.quantity
-          : 0,
-      )
+      const arrayPrices = this.cart.map((item) => item.price * item.quantity)
       return arrayPrices.reduce((sum, current) => sum + current, 0)
     },
   },
@@ -67,9 +63,12 @@ export const useCartStore = defineStore('cart', {
 })
 
 
-
-
 // if (cartProduct === undefined || typeof cartProduct.quantity !== 'number') return //сужение типа данных
+// const arrayPrices = this.cart.map((item) =>
+      //   typeof item.price === 'number' && typeof item.quantity === 'number'
+      //     ? item.price * item.quantity
+      //     : 0,
+      // )
 
 // export type TypeCartObject = {
 //   image: null | string

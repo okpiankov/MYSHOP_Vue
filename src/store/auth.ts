@@ -2,24 +2,24 @@ import { defineStore } from 'pinia'
 
 export type TypeUser = {
   data: {
-    email: string | null
-    fullName: string | null
-    id: number | null
-    role: string | null
-    tel?: string | null
+    email: string | ''
+    fullName: string | ''
+    id: number | 0
+    role: string | ''
+    tel?: string | ''
   }
-  token: string | null
+  token: string | ''
 }
 
 const defaultvalue: TypeUser = {
   data: {
-    email: null,
-    fullName: null,
-    id: null,
-    role: null,
-    tel: null,
+    email: '',
+    fullName: '',
+    id: 0,
+    role: '',
+    tel: '',
   },
-  token: null,
+  token: '',
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -27,13 +27,13 @@ export const useAuthStore = defineStore('auth', {
   // state: () => defaultvalue, не верно!!!
   state: () => {return {
     data: {
-      email: null,
-      fullName: null,
-      id: null,
-      role: null,
-      tel: null,
+      email: '',
+      fullName: '',
+      id: 0,
+      role: '',
+      tel: '',
     },
-    token: null,
+    token: '',
   }},
   getters: {
     isAuth: (state) => state,

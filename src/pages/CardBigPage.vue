@@ -12,13 +12,21 @@ type TypeProduct = {
   price: number
   description: string
   id: number
-  quantity?: number
+  quantity: number
 }
 
 const id = useRoute().params.id
 console.log(id)
 
-const product = ref<TypeProduct | null>(null)
+const product = ref<TypeProduct>({
+  image: '',
+  type: '',
+  name: '',
+  price: 0,
+  description: '',
+  id: 0,
+  quantity: 1
+})
 const isLoading = ref(false)
 
 onMounted(async () => {

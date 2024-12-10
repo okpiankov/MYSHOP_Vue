@@ -91,6 +91,7 @@ form {
     }
     &:focus {
       outline-color: #ea4335;
+      background-color: white;
     }
   }
   button {
