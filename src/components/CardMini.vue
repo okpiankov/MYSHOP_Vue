@@ -38,7 +38,7 @@ const emit = defineEmits(['handleAddItem'])
       />
     </div>
 
-    <div class="description">{{ props.description }}</div>
+    <div class="description s:text-[15px]" >{{ props.description }}</div> 
   </div>
 </template>
 

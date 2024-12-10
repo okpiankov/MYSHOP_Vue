@@ -118,7 +118,7 @@ const Login = () => {
     height: 120px;
     /* background-color: #84c5f9; */
     background-color: black;
-    border-bottom: 1px solid white;
+    // border-bottom: 1px solid white;
     display: flex;
     justify-content: space-between;
     align-items: center;

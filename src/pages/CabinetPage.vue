@@ -72,6 +72,7 @@
       // box-shadow: #6e0000 0px 0px 10px 0px;
       &:hover {
         box-shadow: #6e0000 0px 0px 10px 0px;
+        color: white;
       }
     }
   }
@@ -89,7 +90,7 @@
 }
 .right {
   // background-color: #fca3c5;
-  background: url("right.jpg");
+  background-image: url("right.jpg");
   // background-position: 100% 100%;
   background-size: cover;
   opacity: 0.9;
@@ -115,7 +116,7 @@
 }
 .left {
   // background-color: black;
-  background: url("left.jpg");
+  background-image: url("left.jpg");
   background-position: 100% 100%;
   background-size: cover;
   opacity: 0.9;

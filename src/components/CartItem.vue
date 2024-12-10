@@ -15,7 +15,7 @@ const emit = defineEmits(['handlelDeleteClick', 'handlelQuantityClick'])
 
 <template>
   <div
-    class="flex flex-row h-36 max-w-[500px] gap-1 border border-white border-solid rounded-3xl bg-red-300 text-lg leading-5 s:h-[160px] s:max-w-[310px] "
+    class="flex flex-row h-36 max-w-[500px] gap-1 border border-white border-solid rounded-3xl bg-red-300 text-lg leading-5 s:h-[160px] s:max-w-[310px] s:text-[16px] "
   >
     <img :src="props.image" alt="image" class="size-32 rounded-3xl self-center ml-1" />
 

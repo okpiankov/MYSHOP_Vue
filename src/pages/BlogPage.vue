@@ -50,7 +50,7 @@ section {
     width: 100%;
     // border: white 2px solid;
     // background-color: #be65fe;
-    background: url("gold.webp");
+    background-image: url("gold.webp");
     background-size: cover;
     opacity: 0.9;
     border-radius: 90px;
@@ -78,7 +78,7 @@ section {
       padding: 5px;
       line-height: 0.9;
       overflow: hidden;
-      padding-top: 25px;
+      padding-top: 35px;
     }
     &:hover {
       scale: 1.3;
@@ -91,7 +91,7 @@ section {
     width: 100%;
     // border: red 2px solid;
     // background-color: #6f9fff;
-    background: url("brend.jpeg");
+    background-image: url("brend.jpeg");
     background-size: cover;
     opacity: 0.9;
     border-radius: 60px;
@@ -115,7 +115,7 @@ section {
       padding: 5px;
       line-height: 0.9;
       overflow: hidden;
-      padding-top: 25px;
+      padding-top: 35px;
     }
     &:hover {
       scale: 1.3;
