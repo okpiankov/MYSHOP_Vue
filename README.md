@@ -1,39 +1,37 @@
-# MYSHOP-Vue
+# Интернет-магазин с личный кабинетом
+### Деплой: https://myshop-vue-lyart.vercel.app/
 
-This template should help get you started developing with Vue 3 in Vite.
+###  Используемые технологии при разработке: html, scss, tailwindcss, JavaScript, Vue3, Pinia, TypeScript
+###Временно  используется сервер: https://mokky.dev
+### В данный момент пишу собственный сервер под проект на  Express + MongoDB
 
-## Recommended IDE Setup
+### Функционал:
+- Vue3 composition api,
+- Роутинг- vue-router. Отдельный layout для личного кабинета,
+- Регистрация и авторизация, защищенные роуты, роли пользователей,
+- Реализован поиск товаров на сервере,
+- Страница с оформленными заказами реализована через связь двух  ресурсов /orders?_relations=users. Заказу присваивается user_id, 
+- В корзине можно изменить количество товара или удалить товар. Сохранение товара в корзину происходит при нажатия на иконку  «алмаз»
+2 вида карточек товаров mini и big 
+- Форма с авторизацией и регистрацией, корзина(главная), правая панель навигации реализованны через PopUp,
+- Адаптивная верстка под планшет max-width: 1200px и 770px , под смартфон max-width: 440px,
+Используется axios,
+Pinia. Товары в корзине  и данные пользователей сохраняются в Pinia, 
+Используется библиотека иконок lucide-vue-next
+Реализована различная анимация
+Проект написан на TypeScript
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-## Type Support for `.vue` Imports in TS
+### Доступ в личный кабинет:
+Тестовые пользовательские логин и пароль:\
+логин: user@test.com\
+пароль: 123\
+Либо зарегистрируйте своего пользователя
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+### Установка проекта:
+Для запуска на локальной машине необходимо:\
+Установить npm зависимости:\
+npm install\
+Запустить в режиме разработки:\
+npm run dev\
+Если все прошло успешно, проект будет запущен на http://localhost:5174
