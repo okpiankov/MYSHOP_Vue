@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 
-export type  TypeCartObject = {
-  image:  string 
-  type: string 
-  name: string 
-  description: string 
-  price: number 
-  id: number 
-  quantity?:number 
+export type TypeCartObject = {
+  image: string
+  type: string
+  name: string
+  description: string
+  price: number
+  id: number
+  quantity?: number
 }
 
 type TypeCart = TypeCartObject[]
@@ -17,44 +17,45 @@ export const useCartStore = defineStore('cart', {
   // state: () => {return []},
   //Здесь должен быть реальный стейт а не initialState
   // : { cart: TypeCart }
-  state: () : { cart: TypeCart } => {
+  state: (): { cart: TypeCart } => {
     return { cart: [] }
   },
   getters: {
     IsCart: (state) => state,
     //Логика подсчета общей стоимости с учетом quantity
     //total_cost: () => {...} через : не верно!
-    total_cost() {
-      const arrayPrices = this.cart.map((item) => item.price * item.quantity)
+    total_cost(): number {
+      const arrayPrices = this.cart.map((item) =>
+        typeof item.price === 'number' && typeof item.quantity === 'number'
+          ? item.price * item.quantity
+          : 0,
+      )
       return arrayPrices.reduce((sum, current) => sum + current, 0)
     },
   },
   actions: {
-    add(product) {
+    add(product: TypeCartObject) {
       const cartProduct = this.cart.find((item) => item.id === product.id)
-      // if ( cartProduct=== undefined || typeof cartProduct.quantity !== "number") return;//сужение типа данных
       if (!cartProduct) {
         this.cart.push({ ...product, quantity: 1 })
       } else {
         cartProduct.quantity++
       }
     },
-    increment(product_id) {
+    increment(product_id: number) {
       const product = this.cart.find((item) => item.id === product_id)
-      // if ( product=== undefined || typeof product.quantity !== "number") return;//сужение типа данных
       if (product) {
         product.quantity++
       }
     },
-    decrement(product_id) {
+    decrement(product_id: number) {
       const product = this.cart.find((item) => item.id === product_id)
-      // if ( product=== undefined || typeof product.quantity !== "number") return;//сужение типа данных
       if (product) {
         product.quantity--
         if (product.quantity === 0) this.cart = this.cart.filter((item) => item.id !== product_id)
       }
     },
-    delete(product_id) {
+    delete(product_id: number) {
       this.cart = this.cart.filter((item) => item.id !== product_id)
     },
 
@@ -66,6 +67,9 @@ export const useCartStore = defineStore('cart', {
 })
 
 
+
+
+// if (cartProduct === undefined || typeof cartProduct.quantity !== 'number') return //сужение типа данных
 
 // export type TypeCartObject = {
 //   image: null | string

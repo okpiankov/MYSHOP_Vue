@@ -7,6 +7,7 @@ type TypeProducts = {
   price: number
   description: string
   id: number
+  quantity?: number
 }
 
 const props = defineProps<TypeProducts>()

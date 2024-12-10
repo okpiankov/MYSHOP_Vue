@@ -45,7 +45,7 @@ const Login = () => {
   <!-- Важно!!! название в род.комп. @popUpAuth такое же как и в доч.комп. в const emit = defineEmits(['popUpAuth']) -->
   <!-- <Auth v-if="popUpAuth" @popUpAuth="popUpAuth = !popUpAuth" /> -->
   <LoginForm v-if="popUpLoginForm" @popUpLoginForm="popUpLoginForm = !popUpLoginForm" />
-  <!-- <Banner /> -->
+  <Banner />
   <did class="container">
     <header>
       <div class="logo">

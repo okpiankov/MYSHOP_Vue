@@ -46,7 +46,7 @@ const cartStore = useCartStore()
 </script>
 
 <template>
-  <div v-if="isLoading" class="text-[22px]">Загрузка...</div>
+  <div v-if="isLoading" class="text-[25px]">Загрузка...</div>
   <div
     class="w-[1000px] min-h-[700px] flex flex-row bg-white border border-red-300 border-solid rounded-[37px] ml-3 mt-3 mr-3 mb-24 m:flex-col m:w-[650px] 2s:w-[500px] s:w-[300px] s:h-full"
   >

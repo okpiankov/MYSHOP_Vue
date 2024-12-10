@@ -76,7 +76,7 @@ const handleAddItem = (id: number ) => {
 
 <style scoped lang="scss">
 .loading {
-  font-size: 22px;
+  font-size: 25px;
 }
 section {
   display: grid;

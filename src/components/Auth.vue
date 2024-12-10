@@ -3,6 +3,7 @@ import axios from 'axios'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIsLoadingStore, useAuthStore } from '../store/auth'
+import { storeToRefs } from 'pinia'
 
 // Передача через emit значения реактивной переменной "popUpAuth = !popUpAuth" т.е true
 // Все значения(и транзитные и текущие) передаются через 1 emit
@@ -10,13 +11,16 @@ import { useIsLoadingStore, useAuthStore } from '../store/auth'
 const emit = defineEmits(['popUpLoginForm', 'auth'])
 // console.log(emit)
 
-const formData = reactive({
-  email: 'user@test.com',
-  password: '123',
-})
 const IsLoadingStore = useIsLoadingStore()
+const { isLoading } = storeToRefs(IsLoadingStore)
+
 const authStore = useAuthStore()
 const navigate = useRouter()
+
+const formData = reactive({
+  email: '',
+  password: '',
+})
 
 const login = async () => {
   IsLoadingStore.set(true)
@@ -25,8 +29,9 @@ const login = async () => {
     // console.log(result.data)
 
     authStore.set(result.data)
-    // await navigate.push({ name: 'dataPage' })
-
+    if (result.data.token) {
+      emit('popUpLoginForm')
+    }
   } catch (error) {
     console.log(error)
   } finally {
@@ -34,32 +39,24 @@ const login = async () => {
     navigate.push({ name: 'dataPage' })
   }
 }
-
 </script>
 
 <template>
   <!-- <div class="overlay" @click="popUpLoginForm = !popUpLoginForm"></div> -->
   <div class="overlay" @click="emit('popUpLoginForm')"></div>
-
-   <div  v-if="IsLoadingStore.isLoading" class="loading">Загрузка...</div>
-  <form  v-else @submit.prevent="" class="show">
-    <input type="email" placeholder="Логин user@test.com" v-model="formData.email" />
-    <input type="password" placeholder="Пароль 123" v-model="formData.password" />
-    <button
-      @click="
-        login();
-        emit('popUpLoginForm')
-      "
-    >
-      Войти
-    </button>
+  <!-- <img src="/loader.svg" alt="loader" class="loader" width="220" v-if="isLoading" /> -->
+  <div v-if="isLoading" class="loading">Загрузка...</div>
+  <form v-else @submit.prevent="" class="show">
+    <input type="email" placeholder="Логин: user@test.com" v-model="formData.email" />
+    <input type="password" placeholder="Пароль: 123" v-model="formData.password" />
+    <button @click="login()">Войти</button>
     <div @click="emit('auth')">Регистрация</div>
   </form>
 </template>
 
 <style scoped lang="scss">
 .loading {
-  font-size: 22px;
+  font-size: 27px;
   position: fixed;
   z-index: 50;
   left: 50%;
@@ -99,8 +96,8 @@ form {
     font-size: 20px;
     padding-left: 10px;
     @media (max-width: 440px) {
-    width: 280px;
-  }
+      width: 280px;
+    }
     &:focus {
       outline-color: #ea4335;
     }
@@ -113,9 +110,9 @@ form {
     background-color: #fca3a3;
     font-size: 20px;
     @media (max-width: 440px) {
-    width: 280px;
-  }
-    
+      width: 280px;
+    }
+
     &:hover {
       border-color: black;
       background-color: white;
