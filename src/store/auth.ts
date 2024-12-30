@@ -6,7 +6,7 @@ export type TypeUser = {
     fullName: string | ''
     id: number | 0
     role: string | ''
-    tel?: string | ''
+    phone?: string | ''
   }
   token: string | ''
 }
@@ -17,7 +17,7 @@ const defaultvalue: TypeUser = {
     fullName: '',
     id: 0,
     role: '',
-    tel: '',
+    phone: '',
   },
   token: '',
 }
@@ -31,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
       fullName: '',
       id: 0,
       role: '',
-      tel: '',
+      phone: '',
     },
     token: '',
   }},

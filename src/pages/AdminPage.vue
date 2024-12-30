@@ -1,23 +1,24 @@
 <script setup lang="ts">
-// import CartItem from '../components/CartItem.vue'
+// admin@test.com
+
 </script>
 
 <template>
-  <div class="left showLeft"></div>
-  <div class="right showRight"></div> 
   <div class="container">
+    <div class="title">Админ панель</div>
     <nav class="nav">
-      <div class="decoration cabinet">Личный кабинет</div>
+      <div class="decoration cabinet">Админ панель</div>
 
       <!-- Для children прописывается полный путь начиная с / "/cabinet/dataPage" -->
-      <router-link to="/cabinet/dataPage" class="decoration"> Пользователь </router-link>
+      <router-link to="/admin/products" class="decoration"> Продукты </router-link>
 
-      <router-link to="/cabinet/cartCabinetPage" class="decoration"> Моя корзина </router-link>
-
-      <router-link to="/cabinet/ordersCabinetPage" class="decoration"> Мои заказы </router-link>
+      <div class="decoration"> Пользователи</div>
+      <div class="decoration"> Заказы</div>
+      <!-- <router-link to="/#" class="decoration"> Пользователи </router-link>
+      <router-link to="/#" class="decoration"> Заказы </router-link> -->
     </nav>
 
-    <!-- ЛЕЙАУТ личный кабинет:-->
+    <!-- ЛЕЙАУТ админка:-->
     <!-- Аналогично как и в App указывать корень <RouterView />-->
     <section>
       <RouterView />
@@ -36,10 +37,17 @@
   // border: black 1px solid;
   border-radius: 37px;
   background-color: black;
+  position: relative;
   @media (max-width: 440px) {
       flex-direction: column;
     }
-
+  .title {
+      position: absolute;
+      left: 180px;
+      top: 10px;;
+      color: white;
+      font-size: 23px;
+  }  
   nav {
     width: 170px;
     // min-height: 750px;
@@ -88,56 +96,4 @@
     // background-color: #fff;
   }
 }
-// .right {
-//   // background-color: #fca3c5;
-//   background-image: url("right.jpg");
-//   // background-position: 100% 100%;
-//   background-size: cover;
-//   opacity: 0.9;
-//   position: absolute;
-//   top: 0;
-//   right: -100%;
-//   width: 50vw;
-//   height: 100vh;
-//   z-index: 31;
-// }
-// .showRight {
-//   position: fixed;
-//   animation: showRight 8s;
-//   z-index: 31;
-// }
-// @keyframes showRight {
-//   from {
-//     right: 0;
-//   }
-//   to {
-//     right: -100%;
-//   }
-// }
-// .left {
-//   // background-color: black;
-//   background-image: url("left.jpg");
-//   background-position: 100% 100%;
-//   background-size: cover;
-//   opacity: 0.9;
-//   position: absolute;
-//   top: 0;
-//   left: -100%;
-//   width: 50vw;
-//   height: 100vh;
-//   z-index: 31;
-// }
-// .showLeft {
-//   position: fixed;
-//   animation: showLeft 8s;
-//   z-index: 31;
-// }
-// @keyframes showLeft {
-//   from {
-//     left: 0;
-//   }
-//   to {
-//     left: -100%;
-//   }
-// }
 </style>

@@ -31,8 +31,10 @@ const navigate = useRouter()
 
 const Login = () => {
   if (authStore.$state.token === '') {
+    //либо работате как открытие формы авторизации
     popUpLoginForm.value = !popUpLoginForm.value
   } else {
+    //либо при логине только перенаправляет в личный кабинет
     navigate.push({ name: 'dataPage' })
   }
 }
@@ -59,6 +61,7 @@ const Login = () => {
         <!-- Обращаю внимание тк в authStore тип строка token:'' то и все последующие сравнения  -->
         <!-- со сторокой .token !== '' верно!  .token !== null ошибка! -->
         <UserRound
+          v-if="authStore.$state.data.role === 'client' || authStore.$state.token === ''"
           class="userRound"
           @click="Login()"
           :class="{ active: authStore.$state.token !== '' }"
@@ -72,10 +75,14 @@ const Login = () => {
         <ShoppingCart
           class="shoppingCart"
           @click="navigate.push({ name: 'cartCabinetPage' })"
-          v-if="authStore.$state.token !== ''"
+          v-if="authStore.$state.data.role === 'client' && authStore.$state.token !== ''"
           :class="{ active: cartStore.$state.cart.length !== 0 }"
         />
-        <Menu class="menu" @click="drawerRightMenu = !drawerRightMenu" />
+        <Menu
+          v-if="authStore.$state.data.role === 'client' || authStore.$state.token === ''"
+          class="menu"
+          @click="drawerRightMenu = !drawerRightMenu"
+        />
         <LogOut
           @click="
             authStore.clear();

@@ -33,7 +33,7 @@ const handlelQuantityClick = (id: number, action: string) => {
 
 const isLoading = ref(false)
 const formData = reactive({
-  tel: '',
+  phone: '',
   pay: '',
   delivery: '',
 })
@@ -103,14 +103,7 @@ const orderSet = async () => {
         <div>{{ total_cost }} руб.</div>
       </div>
       <form @submit.prevent="" class="flex flex-col gap-3 mt-3">
-        <input
-          type="text"
-          name="tel"
-          v-model="formData.tel"
-          placeholder="Введите телефон"
-          class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none pl-1"
-        />
-
+        
         <select
           name="pay"
           v-model="formData.pay"

@@ -10,7 +10,7 @@ const authStore = useAuthStore()
     <div class="title">Данные пользователя</div>
     <div>Здравствуйте: {{ authStore.$state.data.fullName }}</div>
     <div>Ваш логин: {{ authStore.$state.data.email }}</div>
-    <div>Ваш телефон: {{ authStore.$state.data.tel }}</div>
+    <div>Ваш телефон: {{ authStore.$state.data.phone }}</div>
     <div>Ваш id: {{ authStore.$state.data.id }}</div>
 
     <!-- <div class="container mx-auto">

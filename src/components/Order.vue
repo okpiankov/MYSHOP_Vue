@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const props = defineProps(['user', 'id', 'goods', 'totalPrice', 'tel', 'pay', 'delivery'])
+const props = defineProps(['user', 'id', 'goods', 'totalPrice', 'phone', 'pay', 'delivery'])
 </script>
 
 <template>
@@ -18,8 +18,7 @@ const props = defineProps(['user', 'id', 'goods', 'totalPrice', 'tel', 'pay', 'd
     <div class="description-order">К оплате: {{ props.totalPrice }} руб.</div>
     <div class="description-order">Доставка: {{ props.delivery }}</div>
     <div class="description-order">
-      Покупатель: <b> {{ props.user.fullName }} тел:
-      {{ props.tel && props.tel ? props.tel : props.user.tel }}</b>
+      Покупатель: <b> {{ props.user.fullName }}</b>
     </div>
     <div
       class="min-h-[30px] w-full bg-white border border-white border-solid rounded-[15px] flex flex-row justify-between items-center pl-5 text-lg status"

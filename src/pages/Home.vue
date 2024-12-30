@@ -25,7 +25,7 @@ onMounted(async () => {
   isLoading.value = true
   try {
     const result = await axios.get('https://5063b1fd5cab69bc.mokky.dev/products')
-    // console.log(result.data)
+    console.log(result.data)
     products.value = result.data
    
   } catch (error) {

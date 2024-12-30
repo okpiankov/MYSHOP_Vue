@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIsLoadingStore, useAuthStore } from '../store/auth'
 import { storeToRefs } from 'pinia'
+import { emailRegex } from '../service/validate'
+
 
 // Передача через emit значения реактивной переменной "popUpAuth = !popUpAuth" т.е true
 // Все значения(и транзитные и текущие) передаются через 1 emit
@@ -18,15 +20,39 @@ const authStore = useAuthStore()
 const navigate = useRouter()
 
 const formData = reactive({
-  email: '',
-  password: '',
+  email: 'user@test.com',
+  password: '123',
 })
+
+//Валидация формы
+const errorEmail = computed(() => {
+  const isValid = formData.email.match(emailRegex)
+  if (!isValid && formData.email !=='') {
+    return 'Это не похоже на Email'
+  } else {
+    return ''
+  }
+})
+const errorPassword = computed(() => {
+  if (formData.password.length < 3 && formData.password !=='') {
+    return 'Пароль не менее 3 символов'
+  }
+  return ''
+})
+
 
 const login = async () => {
   IsLoadingStore.set(true)
   try {
     const result = await axios.post('https://5063b1fd5cab69bc.mokky.dev/auth', formData)
     console.log(result.data)
+
+    if (result.data.data.role === 'client') {
+      navigate.push({ name: 'dataPage' })
+    }
+    if (result.data.data.role === 'admin') {
+      navigate.push({ name: 'admin' })
+    }
 
     authStore.set(result.data)
     if (result.data.token) {
@@ -36,7 +62,7 @@ const login = async () => {
     console.log(error)
   } finally {
     IsLoadingStore.set(false)
-    navigate.push({ name: 'dataPage' })
+    // navigate.push({ name: 'dataPage' })
   }
 }
 </script>
@@ -47,8 +73,12 @@ const login = async () => {
   <!-- <img src="/loader.svg" alt="loader" class="loader" width="220" v-if="isLoading" /> -->
   <div v-if="isLoading" class="loading">Загрузка...</div>
   <form v-else @submit.prevent="" class="show">
+   
+    <div class="nameError">{{ errorEmail }}</div>
     <input type="email" placeholder="Логин: user@test.com" v-model="formData.email" />
+    <div class="nameError">{{ errorPassword }}</div>
     <input type="password" placeholder="Пароль: 123" v-model="formData.password" />
+
     <button @click="login()">Войти</button>
     <div @click="emit('auth')">Регистрация</div>
   </form>
@@ -66,7 +96,7 @@ const login = async () => {
   margin-top: 20px;
 }
 form {
-  height: 245px;
+  min-height: 245px;
   width: 360px;
   background-color: #000000 0.8;
   display: flex;
@@ -86,7 +116,12 @@ form {
   @media (max-width: 440px) {
     width: 320px;
   }
-
+  .nameError {
+    color: white;
+    font-size: 17px;
+    line-height: 1.2;
+    display: contents;
+  }
   input {
     height: 45px;
     width: 330px;

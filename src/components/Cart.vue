@@ -37,7 +37,7 @@ const isLoading = ref(false)
 //Одновременно оформление заказа и регистрация нового покупателя
 const formData = reactive({
   fullName: '',
-  tel: '',
+  phone: '',
   email: '',
   role: 'client',
   // password: '',
@@ -122,7 +122,7 @@ const orderSet = async () => {
         />
 
         <input
-          v-model="formData.tel"
+          v-model="formData.phone"
           type="text"
           placeholder="Введите ваш телефон"
           class="bg-red-300 h-[40px] border-2 border-white border-solid outline-none pl-1"
